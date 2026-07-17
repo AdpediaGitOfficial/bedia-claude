@@ -38,6 +38,16 @@ import {
 
 const app = express();
 
+// Fail fast on a missing JWT secret. Without it, jsonwebtoken throws the opaque
+// "secretOrPrivateKey must have a value" only when a token is first signed
+// (e.g. during registration/login) — catch it at boot with a clear message.
+if (!configKeys.JWT_SECRET) {
+  logger.error(
+    'JWT_SECRET is not set. Set a strong value in the environment (see .env.example) before starting the server.',
+  );
+  process.exit(1);
+}
+
 connectToDatabase();
 
 app.use('/uploads', express.static(path.join(__dirname, './uploads')));
