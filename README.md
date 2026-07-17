@@ -1,10 +1,11 @@
 # Bedia Privé — Monorepo
 
-This repository groups the three parts of the Bedia Privé / Bediapottery platform.
+This repository groups the parts of the Bedia Privé / Bediapottery platform.
 
 ```
 .
-├── frontend/    Next.js public site (React, TypeScript, Tailwind)
+├── frontend/    Next.js public site (React, TypeScript, Tailwind); static assets in frontend/public/
+├── dashboard/   Angular admin dashboard (SPA)
 ├── backend/     REST API (Node.js, Express, TypeScript, Mongoose/MongoDB)
 ├── database/    MongoDB dump (mongodump BSON) of `bediaprive_db`
 └── docs/        Analysis & documentation
@@ -14,8 +15,9 @@ This repository groups the three parts of the Bedia Privé / Bediapottery platfo
 
 | Path | Description |
 |------|-------------|
-| [`frontend/`](frontend/) | The customer-facing web app. See `frontend/README.md`. |
-| [`backend/`](backend/) | The Express API serving workshops, bookings, Stripe checkout, CMS content, leads, and the admin dashboard. Copy `backend/.env.example` → `backend/.env` and fill in values. |
+| [`frontend/`](frontend/) | The customer-facing web app. Public/static assets live in `frontend/public/`. See `frontend/README.md`. |
+| [`dashboard/`](dashboard/) | The Angular admin dashboard SPA. See `dashboard/README.md`. |
+| [`backend/`](backend/) | The Express API serving workshops, bookings, Stripe checkout, CMS content, and leads. Copy `backend/.env.example` → `backend/.env` and fill in values. |
 | [`database/bediaprive_db/`](database/) | BSON dump for local restore via `mongorestore`. |
 | [`docs/BACKEND_ANALYSIS.md`](docs/BACKEND_ANALYSIS.md) | Comprehensive backend + database analysis (architecture, ERD, data flow, security/perf findings). |
 
