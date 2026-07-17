@@ -1,0 +1,450 @@
+swagger: '3.0.0'
+info:
+  title: Career Model API
+  description: API related to Career models
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Local server
+  - url: https://bediapottery.ae/
+    description: Live server
+paths:
+  /careers/all:
+    get:
+      summary: get all careers
+      description: Endpoint to get all careers
+      tags:
+        - Career Model
+      parameters:
+        - name: search
+          in: query
+          description: keyword for search
+          required: false
+          schema:
+            type: string
+            example: brocker
+        - name: page
+          in: query
+          description: page  number for pagination
+          required: false
+          schema:
+            type: number
+            example: 1
+        - name: limit
+          in: query
+          description: limit  for pagination
+          required: false
+          schema:
+            type: number
+            example: 10
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched careers Successfully
+                  result:
+                    type: string
+                    example: []
+  /careers/adminAll:
+    get:
+      summary: get all careers
+      description: Endpoint to get all careers
+      tags:
+        - Career Model
+      security:
+        - JWT: []
+      parameters:
+        - name: search
+          in: query
+          description: keyword for search
+          required: false
+          schema:
+            type: string
+            example: brocker
+        - name: page
+          in: query
+          description: page  number for pagination
+          required: false
+          schema:
+            type: number
+            example: 1
+        - name: limit
+          in: query
+          description: limit  for pagination
+          required: false
+          schema:
+            type: number
+            example: 10
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched careers Successfully
+                  result:
+                    type: string
+                    example: []
+  /careers:
+    post:
+      summary: Create career
+      description: Endpoint to create career
+      tags:
+        - Career Model
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                responsibilities:
+                  type: string
+                roleSummary:
+                  type: string
+                requirements:
+                  type: string
+                jobType:
+                  type: string
+                  enum: ['Remote', 'Hybrid', 'In Person']
+                workingHours:
+                  type: string
+                  enum: ['Full Time', 'Part Time']
+              required:
+                - title
+                - description
+                - responsibilities
+                - requirements
+                - roleSummary
+                - jobType
+                - workingHours
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Created career successfully
+                  result:
+                    type: boolean
+                    example: true
+
+  /careers/slug/{slug}:
+    get:
+      summary: get career by slug
+      description: Endpoint to get a career detail by slug
+      tags:
+        - Career Model
+      parameters:
+        - name: slug
+          in: path
+          description: career slug
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched career Successfully
+                  result:
+                    type: string
+                    example: []
+  /careers/meta/{slug}:
+    get:
+      summary: get career meta data by slug
+      description: Endpoint to get a career meta data by slug
+      tags:
+        - Career Model
+      parameters:
+        - name: slug
+          in: path
+          description: career slug
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched meta data Successfully
+                  result:
+                    type: string
+                    example: []
+  /careers/{id}:
+    get:
+      summary: get career by id
+      description: Endpoint to get a career detail by id
+      tags:
+        - Career Model
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: career Id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched career Successfully
+                  result:
+                    type: string
+                    example: []
+    put:
+      summary: update career by id
+      description: Endpoint to update career by id
+      tags:
+        - Career Model
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: career Id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                responsibilities:
+                  type: string
+                roleSummary:
+                  type: string
+                requirements:
+                  type: string
+                jobType:
+                  type: string
+                  enum: ['Remote', 'Hybrid', 'In Person']
+                workingHours:
+                  type: string
+                  enum: ['Full Time', 'Part Time']
+              required:
+                - title
+                - description
+                - responsibilities
+                - requirements
+                - roleSummary
+                - jobType
+                - workingHours
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Updated career successfully
+                  result:
+                    type: boolean
+                    example: true
+    delete:
+      summary: delete career by id
+      description: Endpoint to delete career a career by id
+      tags:
+        - Career Model
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: career Id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Deleted career successfully
+                  result:
+                    type: boolean
+                    example: true
+  /careers/job-application/all:
+    get:
+      summary: get all job applications
+      description: Endpoint to get all job applications
+      tags:
+        - Job Application Model
+      security:
+        - JWT: []
+      parameters:
+        - name: search
+          in: query
+          description: keyword for search
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: page  number for pagination
+          required: false
+          schema:
+            type: number
+            example: 1
+        - name: limit
+          in: query
+          description: limit  for pagination
+          required: false
+          schema:
+            type: number
+            example: 10
+        - name: jobSlug
+          in: query
+          description: jobSlug for pagination
+          required: false
+          schema:
+            type: string
+            example: backend-developer
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched job applications Successfully
+                  result:
+                    type: string
+                    example: []
+  /careers/job-application:
+    post:
+      summary: Create job application
+      description: Endpoint to create job application
+      tags:
+        - Job Application Model
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                resume:
+                  type: string
+                  format: binary
+                applicantName:
+                  type: string
+                email:
+                  type: string
+                phone:
+                  type: string
+                coverLetter:
+                  type: string
+                jobTitle:
+                  type: string
+                jobSlug:
+                  type: string
+              required:
+                - resume
+                - applicantName
+                - email
+                - phone
+                - jobTitle
+                - jobSlug
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Added Job Application successfully
+                  result:
+                    type: boolean
+                    example: true

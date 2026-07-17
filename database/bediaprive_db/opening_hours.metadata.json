@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"ff557673ef9d4e6ca5af188e2ddefe2d","collectionName":"opening_hours","type":"collection"}

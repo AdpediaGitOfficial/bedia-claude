@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"3a0d4dabe5524dc489f0dd7ce5a353ca","collectionName":"claytypes","type":"collection"}

@@ -1,0 +1,255 @@
+swagger: '3.0.0'
+info:
+  title: Career Footer Model API
+  description: API related to Career Footer models
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Local server
+  - url: https://bediapottery.ae/
+    description: Live server
+paths:
+  /careerFooter/all:
+    get:
+      summary: get all career footers
+      description: Endpoint to get all career footers
+      tags:
+        - Career Footer Model
+      parameters:
+        - name: search
+          in: query
+          description: keyword for search
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: page  number for pagination
+          required: false
+          schema:
+            type: number
+            example: 1
+        - name: limit
+          in: query
+          description: limit  for pagination
+          required: false
+          schema:
+            type: number
+            example: 10
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched Career Footers Successfully
+                  result:
+                    type: string
+                    example: []
+  /careerFooter/adminAll:
+    get:
+      summary: get all career footers for dashboard
+      description: Endpoint to get all career footers for dashboard
+      tags:
+        - Career Footer Model
+      security:
+        - JWT: []
+      parameters:
+        - name: search
+          in: query
+          description: keyword for search
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: page  number for pagination
+          required: false
+          schema:
+            type: number
+            example: 1
+        - name: limit
+          in: query
+          description: limit  for pagination
+          required: false
+          schema:
+            type: number
+            example: 10
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched Career Footers Successfully
+                  result:
+                    type: string
+                    example: []
+  /careerFooter:
+    post:
+      summary: create career footer
+      description: Endpoint to create career footer
+      tags:
+        - Career Footer Model
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+                image:
+                  type: string
+              required:
+                - title
+                - content
+                - image
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Created Career Footer successfully
+                  result:
+                    type: boolean
+                    example: true
+
+  /careerFooter/{id}:
+    get:
+      summary: get career footer by id
+      description: Endpoint to get a career footer detail by id
+      tags:
+        - Career Footer Model
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: Career Footer Id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched Career Footer Successfully
+                  result:
+                    type: string
+                    example: []
+    put:
+      summary: update career footer by id
+      description: Endpoint to update career footer by id
+      tags:
+        - Career Footer Model
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: Career Footer Id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+                image:
+                  type: string
+              required:
+                - title
+                - content
+                - image
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Updated Career Footer successfully
+                  result:
+                    type: boolean
+                    example: true
+    delete:
+      summary: delete career footer by id
+      description: Endpoint to delete career footer a career footer by id
+      tags:
+        - Career Footer Model
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: Career Footer Id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Deleted Career Footer successfully
+                  result:
+                    type: boolean
+                    example: true

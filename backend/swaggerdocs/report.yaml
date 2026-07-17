@@ -1,0 +1,79 @@
+swagger: '3.0.0'
+info:
+  title: Report Model API
+  description: API related to Report models
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Local server
+  - url: https://bediapottery.ae/
+    description: Live server
+paths:
+  /report:
+    post:
+      summary: upload report
+      description: Endpoint upload report
+      tags:
+        - Reports
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Report uploaded successfully
+                  result:
+                    type: string
+                    example: []
+    get:
+      summary: get report path
+      description: Endpoint get report path
+      tags:
+        - Reports
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Report fetched successfully
+                  result:
+                    type: string
+                    example: {}
+# components:
+#   securitySchemes:
+#     JWT:
+#       type: apiKey
+#       in: header
+#       name: Authorization
+#       description: JWT Bearer token

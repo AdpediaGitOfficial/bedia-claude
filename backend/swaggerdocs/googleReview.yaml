@@ -1,0 +1,302 @@
+swagger: '3.0.0'
+info:
+  title: Google Review API
+  description: API related to Google Reviews and custom media attachment
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8000
+    description: Local server
+  - url: https://bediapottery.ae/
+    description: Live server
+
+paths:
+  /reviews/all:
+    get:
+      summary: Get all active google reviews
+      description: Public endpoint to fetch reviews
+      tags:
+        - Google Review
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: number
+            example: 1
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: number
+            example: 10
+      responses:
+        200:
+          description: Reviews fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoogleReviewListResponse'
+
+  /reviews/adminAll:
+    get:
+      summary: Get all google reviews (Admin)
+      tags:
+        - Google Review
+      security:
+        - JWT: []
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+            example: rahul
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: number
+            example: 1
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: number
+            example: 10
+      responses:
+        200:
+          description: Reviews fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoogleReviewListResponse'
+
+  /reviews:
+    post:
+      summary: Create manual / attach media to review
+      tags:
+        - Google Review
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoogleReviewCreateBody'
+      responses:
+        200:
+          description: Review created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessBoolean'
+
+  /reviews/sync:
+    post:
+      summary: Sync reviews from Google
+      tags:
+        - Google Review
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: Google reviews synced successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessBoolean'
+
+  /reviews/{id}:
+    get:
+      summary: Get review by ID
+      tags:
+        - Google Review
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Review fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoogleReviewSingleResponse'
+
+    put:
+      summary: Update review by ID
+      tags:
+        - Google Review
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoogleReviewCreateBody'
+      responses:
+        200:
+          description: Review updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessBoolean'
+
+    delete:
+      summary: Delete review by ID
+      tags:
+        - Google Review
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Review deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessBoolean'
+
+components:
+  securitySchemes:
+    JWT:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    GoogleReview:
+      type: object
+      properties:
+        _id:
+          type: string
+        placeId:
+          type: string
+        authorName:
+          type: string
+        rating:
+          type: number
+        text:
+          type: string
+        profilePhotoUrl:
+          type: string
+        reviewTime:
+          type: number
+        source:
+          type: string
+          enum: [google, manual]
+        media:
+          type: object
+          properties:
+            videos:
+              type: array
+              items:
+                type: string
+            images:
+              type: array
+              items:
+                type: string
+        isActive:
+          type: boolean
+        isDeleted:
+          type: boolean
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+
+    GoogleReviewCreateBody:
+      type: object
+      properties:
+        placeId:
+          type: string
+        authorName:
+          type: string
+        rating:
+          type: number
+          minimum: 1
+          maximum: 5
+        text:
+          type: string
+        profilePhotoUrl:
+          type: string
+        reviewTime:
+          type: number
+        source:
+          type: string
+          enum: [google, manual]
+        isActive:
+          type: boolean
+        media:
+          type: object
+          properties:
+            videos:
+              type: array
+              items:
+                type: string
+            images:
+              type: array
+              items:
+                type: string
+      required:
+        - placeId
+        - authorName
+        - rating
+        - reviewTime
+
+    GoogleReviewListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Fetched reviews successfully
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/GoogleReview'
+
+    GoogleReviewSingleResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Fetched review successfully
+        result:
+          $ref: '#/components/schemas/GoogleReview'
+
+    SuccessBoolean:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Operation successful
+        result:
+          type: boolean
+          example: true

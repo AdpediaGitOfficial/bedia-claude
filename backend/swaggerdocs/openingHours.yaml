@@ -1,0 +1,259 @@
+swagger: '3.0.0'
+info:
+  title: Opening Hours API
+  description: API related to Opening Hours
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8000
+    description: Local server
+  - url: https://bediapottery.ae/
+    description: Live server
+
+paths:
+  /opening-hours/all:
+    get:
+      summary: get opening hours
+      description: Endpoint to get active opening hours
+      tags:
+        - Opening Hours
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched opening hours successfully
+                  result:
+                    type: object
+                    properties:
+                      title:
+                        type: string
+                        example: Opening Hours
+                      days:
+                        type: string
+                        example: Tuesday - Sunday
+                      openTime:
+                        type: string
+                        example: 2:00 PM
+                      closeTime:
+                        type: string
+                        example: 10:00 PM
+
+  /opening-hours/adminAll:
+    get:
+      summary: get all opening hours (admin)
+      description: Endpoint to get all opening hours
+      tags:
+        - Opening Hours
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched opening hours successfully
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                        title:
+                          type: string
+                        days:
+                          type: string
+                        openTime:
+                          type: string
+                        closeTime:
+                          type: string
+                        isActive:
+                          type: boolean
+
+  /opening-hours:
+    post:
+      summary: create opening hours
+      description: Endpoint to create opening hours
+      tags:
+        - Opening Hours
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Opening Hours
+                days:
+                  type: string
+                  example: Tuesday - Sunday
+                openTime:
+                  type: string
+                  example: 2:00 PM
+                closeTime:
+                  type: string
+                  example: 10:00 PM
+                isActive:
+                  type: boolean
+                  example: true
+              required:
+                - days
+                - openTime
+                - closeTime
+
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Created opening hours successfully
+                  result:
+                    type: boolean
+                    example: true
+
+  /opening-hours/{id}:
+    get:
+      summary: get opening hours by id
+      description: Endpoint to get opening hours detail by id
+      tags:
+        - Opening Hours
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: opening hours Id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched opening hours successfully
+                  result:
+                    type: object
+
+    put:
+      summary: update opening hours by id
+      description: Endpoint to update opening hours by id
+      tags:
+        - Opening Hours
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: opening hours Id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                days:
+                  type: string
+                openTime:
+                  type: string
+                closeTime:
+                  type: string
+                isActive:
+                  type: boolean
+              required:
+                - days
+                - openTime
+                - closeTime
+
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Updated opening hours successfully
+                  result:
+                    type: boolean
+                    example: true
+
+    delete:
+      summary: delete opening hours by id
+      description: Endpoint to delete opening hours by id
+      tags:
+        - Opening Hours
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: opening hours Id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Deleted opening hours successfully
+                  result:
+                    type: boolean
+                    example: true

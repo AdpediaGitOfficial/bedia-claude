@@ -1,0 +1,886 @@
+swagger: '3.0.0'
+
+info:
+  title: Workshop API
+  description: API related to Workshop management
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8000
+    description: Local server
+  - url: https://bediapottery.ae
+    description: Live server
+
+tags:
+  - name: Workshop
+    description: Workshop APIs
+
+paths:
+  /workshop/all:
+    get:
+      tags: [Workshop]
+      summary: Get all active workshops
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: number
+            example: 1
+        - name: limit
+          in: query
+          schema:
+            type: number
+            example: 10
+        - name: categoryId
+          in: query
+          schema:
+            type: string
+      responses:
+        200:
+          description: Workshops fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkshopListResponse'
+
+  /workshop/homepage:
+    get:
+      tags: [Workshop]
+      summary: Get homepage workshops grouped by category
+      description: Fetch workshops for homepage where category showOnHomepage is true
+      responses:
+        200:
+          description: Homepage workshops fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Homepage workshops fetched successfully
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        layout:
+                          type: string
+                          example: featured
+                        imageUrl:
+                          type: string
+                        title:
+                          type: string
+                        subtitle:
+                          type: string
+                        description:
+                          type: string
+                        cards:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              _id:
+                                type: string
+                              title:
+                                type: string
+                              image:
+                                type: string
+                              description:
+                                type: string
+
+  /workshop/adminAll:
+    get:
+      tags: [Workshop]
+      summary: Get all workshops (Admin)
+      security:
+        - JWT: []
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: number
+        - name: limit
+          in: query
+          schema:
+            type: number
+        - name: isActive
+          in: query
+          schema:
+            type: boolean
+      responses:
+        200:
+          description: Admin workshops fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkshopListResponse'
+
+  /workshop/byCategory:
+    get:
+      tags: [Workshop]
+      summary: Get workshops by category slug
+      description: Returns category details and workshops under that category
+      parameters:
+        - name: slug
+          in: query
+          required: true
+          schema:
+            type: string
+          example: pottery
+
+        - name: page
+          in: query
+          schema:
+            type: number
+            example: 1
+
+        - name: limit
+          in: query
+          schema:
+            type: number
+            example: 10
+
+        - name: search
+          in: query
+          schema:
+            type: string
+            example: beginner
+
+      responses:
+        200:
+          description: Workshops fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Homepage workshops fetched successfully
+                  result:
+                    type: object
+                    properties:
+                      totalCount:
+                        type: number
+                        example: 5
+                      category:
+                        type: object
+                        properties:
+                          title:
+                            type: string
+                            example: Pottery
+                          image:
+                            type: string
+                            example: category.jpg
+                          description:
+                            type: string
+                          slug:
+                            type: string
+                            example: pottery
+                      workshops:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Workshop'
+
+  /workshop/bySlug/{slug}:
+    get:
+      tags: [Workshop]
+      summary: Get single workshop by slug
+      description: Fetch workshop details using workshop slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+          example: pottery-on-wheel
+      responses:
+        200:
+          description: Workshop fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Workshop fetched successfully
+                  result:
+                    $ref: '#/components/schemas/Workshop'
+
+        404:
+          description: Workshop not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Workshop not found
+
+  /workshop/availability:
+    post:
+      tags: [Workshop]
+      summary: Check workshop slot availability
+      description: Check if a workshop slot is available for booking based on date and number of guests
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - workshopId
+                - bookingDate
+                - slotId
+                - guests
+              properties:
+                workshopId:
+                  type: string
+                  example: 65f1a2b3c4d5e6f7890abc12
+                bookingDate:
+                  type: string
+                  format: date
+                  example: 2026-01-26
+                slotId:
+                  type: string
+                  example: 65f1a2b3c4d5e6f7890slot12
+                guests:
+                  type: number
+                  example: 4
+      responses:
+        200:
+          description: Workshop availability checked successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Workshop availability checked successfully
+                  result:
+                    type: object
+                    properties:
+                      available:
+                        type: boolean
+                        example: true
+                      availableCount:
+                        type: number
+                        example: 6
+                      willBlockSlot:
+                        type: boolean
+                        example: false
+        400:
+          description: Bad request
+        404:
+          description: Workshop not found
+  # /workshop/booking:
+  #   post:
+  #     tags:
+  #       - Workshop
+  #     summary: Create multiple workshop bookings
+  #     security:
+  #       - JWT: []
+
+  #     requestBody:
+  #       required: true
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             required:
+  #               - workshops
+  #               - customer
+  #             properties:
+  #               workshops:
+  #                 type: array
+  #                 minItems: 1
+  #                 items:
+  #                   type: object
+  #                   required:
+  #                     - workshopId
+  #                     - bookingDate
+  #                     - slotId
+  #                     - items
+  #                   properties:
+  #                     workshopId:
+  #                       type: string
+  #                     bookingDate:
+  #                       type: string
+  #                       format: date
+  #                     slotId:
+  #                       type: string
+  #                     items:
+  #                       type: array
+  #                       items:
+  #                         type: object
+  #                         required:
+  #                           - optionId
+  #                           - people
+  #                         properties:
+  #                           optionId:
+  #                             type: string
+  #                           people:
+  #                             type: number
+  #                             minimum: 1
+
+  #               customer:
+  #                 type: object
+  #                 required:
+  #                   - firstName
+  #                   - lastName
+  #                   - country
+  #                   - address
+  #                   - city
+  #                   - phone
+  #                   - email
+  #                 properties:
+  #                   firstName:
+  #                     type: string
+  #                   lastName:
+  #                     type: string
+  #                   companyName:
+  #                     type: string
+  #                   notes:
+  #                     type: string
+  #                   country:
+  #                     type: string
+  #                   address:
+  #                     type: string
+  #                   city:
+  #                     type: string
+  #                   state:
+  #                     type: string
+  #                   phone:
+  #                     type: string
+  #                   email:
+  #                     type: string
+  #                     format: email
+
+  #     responses:
+  #       '201':
+  #         description: Workshops booked successfully
+
+  /workshop/booking:
+    post:
+      tags:
+        - Workshop
+      summary: Create multiple workshop bookings
+      security:
+        - JWT: []
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - workshops
+                - customer
+              properties:
+                workshops:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: object
+                    required:
+                      - workshopId
+                      - bookingDate
+                      - slotId
+                      - items
+                    properties:
+                      workshopId:
+                        type: string
+                      bookingDate:
+                        type: string
+                        format: date
+                      slotId:
+                        type: string
+                      items:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                            - optionId
+                            - people
+                          properties:
+                            optionId:
+                              type: string
+                            people:
+                              type: number
+                              minimum: 1
+
+                customer:
+                  type: object
+                  required:
+                    - firstName
+                    - lastName
+                    - country
+                    - address
+                    - city
+                    - phone
+                    - email
+                  properties:
+                    firstName:
+                      type: string
+                    lastName:
+                      type: string
+                    companyName:
+                      type: string
+                    notes:
+                      type: string
+                    country:
+                      type: string
+                    address:
+                      type: string
+                    city:
+                      type: string
+                    state:
+                      type: string
+                    phone:
+                      type: string
+                    email:
+                      type: string
+                      format: email
+
+      responses:
+        '201':
+          description: Workshops booked successfully
+
+  /workshop/bookings/all:
+    get:
+      tags:
+        - Workshop
+      summary: Get workshop bookings
+      description: Fetch paginated workshop bookings with filters
+      security:
+        - JWT: []
+
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: number
+            example: 1
+
+        - name: limit
+          in: query
+          schema:
+            type: number
+            example: 10
+
+        - name: search
+          in: query
+          schema:
+            type: string
+            example: WBK1001
+
+        - name: bookingStatus
+          in: query
+          schema:
+            type: string
+            enum: [pending, confirmed, cancelled, completed]
+
+        - name: paymentStatus
+          in: query
+          schema:
+            type: string
+            enum: [pending, paid, failed, refunded]
+
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date
+
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date
+
+      responses:
+        200:
+          description: Workshop bookings fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Workshop bookings fetched successfully
+                  result:
+                    type: object
+                    properties:
+                      totalCount:
+                        type: number
+                        example: 10
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/WorkshopBooking'
+
+/workshop/cart:
+  post:
+    tags:
+      - Cart
+    summary: Add item to cart
+    description: >
+      Add a workshop item to user's cart or update existing item quantity.
+
+      Supports gift bookings via `bookingType: gift`. For gift items,
+      `bookingDate` and `slotId` are not required (the recipient picks a slot
+      when redeeming) and `giftDetails` should be provided. Each gift item is
+      kept as its own cart line (never merged) so its recipient is preserved.
+    security:
+      - JWT: []
+
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - userId
+              - workshopId
+              - optionId
+              - people
+            properties:
+              userId:
+                type: string
+                example: '65f1a2b3c4d5e6f7890a1234'
+              workshopId:
+                type: string
+                example: '65f1a2b3c4d5e6f7890a5678'
+              bookingDate:
+                type: string
+                format: date
+                nullable: true
+                description: Required for normal bookings; omit for gift bookings.
+                example: '2026-04-10'
+              slotId:
+                type: string
+                nullable: true
+                description: Required for normal bookings; omit for gift bookings.
+                example: '65f1a2b3c4d5e6f7890a9999'
+              optionId:
+                type: string
+                example: '65f1a2b3c4d5e6f7890a8888'
+              people:
+                type: integer
+                minimum: 1
+                example: 2
+              adult:
+                type: integer
+                nullable: true
+                example: 2
+              child:
+                type: integer
+                nullable: true
+                example: 0
+              makingType:
+                type: string
+                nullable: true
+                example: wheel
+              bookingType:
+                type: string
+                enum:
+                  - normal
+                  - gift
+                  - pottery
+                default: normal
+                example: gift
+              giftDetails:
+                type: object
+                nullable: true
+                description: Provided when bookingType is 'gift'.
+                properties:
+                  recipientName:
+                    type: string
+                    nullable: true
+                    example: Jane Doe
+                  giftEmail:
+                    type: string
+                    nullable: true
+                    example: jane@example.com
+                  giftPhone:
+                    type: string
+                    nullable: true
+                    example: '+971501234567'
+                  giftFor:
+                    type: string
+                    nullable: true
+                    example: Spouse
+                  occasion:
+                    type: string
+                    nullable: true
+                    example: Birthday
+                  personalMessage:
+                    type: string
+                    nullable: true
+                    example: Happy Birthday! Enjoy your workshop.
+
+    responses:
+      200:
+        description: Item added to cart successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                message:
+                  type: string
+                  example: Item added to cart
+                data:
+                  $ref: '#/components/schemas/Cart'
+
+      400:
+        description: Bad request (Invalid input or option)
+      404:
+        description: Workshop not found
+/workshop/cart/{userId}:
+  get:
+    tags:
+      - Cart
+    summary: Get user cart
+    description: Fetch the cart details for a specific user by userId
+    security:
+      - JWT: []
+
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        description: User ID to fetch cart
+        schema:
+          type: string
+          example: '65f1a2b3c4d5e6f7890a1234'
+
+    responses:
+      200:
+        description: Cart fetched successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                data:
+                  $ref: '#/components/schemas/Cart'
+
+      404:
+        description: Cart not found
+
+      400:
+        description: Invalid userId supplied
+
+/workshop/cart/item:
+  delete:
+    tags:
+      - Cart
+    summary: Remove item from cart
+    description: Remove a specific item from user's cart using item index
+    security:
+      - JWT: []
+
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - userId
+              - itemIndex
+            properties:
+              userId:
+                type: string
+                example: '65f1a2b3c4d5e6f7890a1234'
+              itemIndex:
+                type: integer
+                minimum: 0
+                example: 0
+
+    responses:
+      200:
+        description: Item removed from cart successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                message:
+                  type: string
+                  example: Item removed from cart
+                data:
+                  $ref: '#/components/schemas/Cart'
+
+      400:
+        description: Invalid item index
+
+      404:
+        description: Cart not found
+
+/workshop/cart/checkout:
+  post:
+    tags:
+      - Cart
+    summary: Checkout cart and create order
+    description: >
+      Convert cart items into workshop bookings and create an order with a
+      Stripe checkout session. Gift items (bookingType 'gift') are each turned
+      into a separate gift booking — slot/day/capacity checks are skipped and
+      the item's giftDetails plus a one-year giftValidity are carried over.
+    security:
+      - JWT: []
+
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - customer
+            properties:
+              userId:
+                type: string
+                example: '65f1a2b3c4d5e6f7890a1234'
+                description: Optional if taken from JWT
+
+              customer:
+                type: object
+                required:
+                  - firstName
+                  - lastName
+                  - country
+                  - address
+                  - city
+                  - phone
+                  - email
+                properties:
+                  firstName:
+                    type: string
+                    example: John
+
+                  lastName:
+                    type: string
+                    example: Doe
+
+                  companyName:
+                    type: string
+                    nullable: true
+                    example: ABC Pvt Ltd
+
+                  notes:
+                    type: string
+                    nullable: true
+                    example: Please call before arrival
+
+                  country:
+                    type: string
+                    example: UAE
+
+                  address:
+                    type: string
+                    example: Dubai Marina
+
+                  city:
+                    type: string
+                    example: Dubai
+
+                  state:
+                    type: string
+                    nullable: true
+                    example: Dubai
+
+                  zipCode:
+                    type: string
+                    nullable: true
+                    example: '00000'
+
+                  phone:
+                    type: string
+                    example: '+971501234567'
+
+                  email:
+                    type: string
+                    format: email
+                    example: john@example.com
+
+    responses:
+      200:
+        description: Checkout successful and Stripe session created
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                message:
+                  type: string
+                  example: Checkout initiated successfully
+                data:
+                  type: object
+                  properties:
+                    checkoutUrl:
+                      type: string
+                      example: https://checkout.stripe.com/session/abc123
+                    orderId:
+                      type: string
+                      example: '6612ab34cd56ef7890ab1234'
+
+      400:
+        description: >
+          Bad Request:
+          - Cart is empty
+          - Invalid slot selected
+          - Slot capacity exceeded
+          - Validation error
+
+      404:
+        description: >
+          Not Found:
+          - Workshop not available
