@@ -157,6 +157,16 @@ FRONTEND_URL=https://bediaprive.adpedia.in
 # Mail, Google Places, S3/DO Spaces, etc. — fill the rest.
 ```
 
+**Do not leave required values blank** — the API fails fast at boot (or on first
+request) if any of these are missing. Generate the JWT secret so it's never empty:
+```bash
+grep -q '^JWT_SECRET=.\+' .env || echo "JWT_SECRET=$(openssl rand -base64 48)" >> .env
+grep -q '^JWT_DURATION='   .env || echo "JWT_DURATION=60d" >> .env
+```
+Required (server refuses to start / login breaks without them):
+`DATABASE`, `JWT_SECRET`, `STRIPE_SECRET_KEY` (**must be `sk_...`, not `pk_...`**),
+`STRIPE_WEBHOOK_SECRET`, `CORS_URLS` (must include the site **and** dashboard origins).
+
 ### 4.2 Build & run
 ```bash
 npm ci
@@ -176,6 +186,17 @@ curl -s localhost:8000/hello         # -> hello world
 > Uploaded files: the intended durable store is S3/DigitalOcean Spaces
 > (`DO_SPACES_*`). If you rely on the local `uploads/` dir instead, it is
 > ephemeral per‑deploy and won't work across multiple instances — prefer Spaces.
+
+### 4.3 Create the dashboard admin
+The dashboard logs in via `/auth/login` against the `users` collection. If you
+restored the dump, the admin's original password is only a hash (unknown), so
+set a known one (creates the admin if missing):
+```bash
+cd /var/www/bedia-claude/backend
+npx ts-node scripts/setAdminPassword.ts admin@bediapottery.ae 'ChangeMe_Strong123'
+```
+Then log in with that email/password and change it afterward (there is no
+password‑reset UI; re‑run this script to rotate).
 
 ---
 
@@ -200,7 +221,9 @@ For fresh content at deploy time, have the API reachable during `npm run build`
 ## 6. Admin dashboard (`/dashboard`, Angular → static)
 
 Point the production build at the live API, then build and let Nginx serve the
-static output.
+static output. (A committed `dashboard/.npmrc` sets `legacy-peer-deps=true`, so
+`npm ci` / `npm install` resolve this legacy Angular tree without the old
+`ERESOLVE` peer‑dependency error — no flags needed.)
 
 ```bash
 cd /var/www/bedia-claude/dashboard
@@ -344,4 +367,19 @@ See `docs/BACKEND_ANALYSIS.md` for the full list and rationale.
 - **Zero downtime:** PM2 keeps the old process serving until the new build is
   ready; `pm2 reload bedia-api` for graceful reload.
 - **Monitoring:** `pm2 install pm2-logrotate`; consider uptime checks on `/hello`.
-```
+
+---
+
+## 12. Troubleshooting (errors seen in practice)
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `npm error code ERESOLVE ... karma-jasmine-html-reporter / jasmine-core` on `npm install` in **dashboard** | Legacy Angular tree under npm 7+ strict peer resolution | Already handled by committed `dashboard/.npmrc` (`legacy-peer-deps=true`). Use `npm ci`. |
+| UI: **`secretOrPrivateKey must have a value`** (on register/login) | `JWT_SECRET` empty in `backend/.env` | Set it (`openssl rand -base64 48`), `pm2 restart bedia-api`. API now fails fast at boot if unset. |
+| API won't start: `STRIPE_SECRET_KEY is a publishable key (pk_...)` | A `pk_...` key set as the secret key | Use a real Stripe **secret** key `sk_...`. |
+| API won't start: `DATABASE is not set` | Missing/empty `DATABASE` | Set the Mongo connection string in `.env`. |
+| Dashboard: **`Invalid Email/Password`** for a known admin | Admin missing in the DB the API uses, or password unknown (restored dump has only a hash) | Run §4.3 `setAdminPassword.ts`; confirm `DATABASE` points at the restored DB. |
+| DB routes return `500`, `/hello` returns `200` | API up but MongoDB unreachable/authless | Check `mongod` is running, auth enabled, and the `DATABASE` credentials/`authSource` are correct. |
+| Browser CORS errors from the site/dashboard | Origin not in `CORS_URLS` | Add the exact origin(s) to `CORS_URLS` (JSON array), restart. |
+| `npm audit` shows 1 high (mongoose `$nor`) | Fixed only in 8.24.1, which breaks types; app pins `~8.16.5` | Not exploitable here (no `sanitizeFilter`/`$nor` usage). Use `npm ci` to keep the pinned, patched tree. |
+| `npm warn deprecated tslint@6.1.3` (dashboard) | Old Angular uses TSLint | Warning only — safe to ignore; does not block install/build. |
