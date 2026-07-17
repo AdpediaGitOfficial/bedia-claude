@@ -1,0 +1,404 @@
+<nz-card class="page-card">
+
+  <!-- Breadcrumb -->
+  <nz-breadcrumb class="mb-4">
+    <nz-breadcrumb-item>
+      <a routerLink="/dashboard/home">
+        <i nz-icon nzType="home"></i>
+        Home
+      </a>
+    </nz-breadcrumb-item>
+
+    <nz-breadcrumb-item>
+      <a routerLink="/admin/workshops">Workshops</a>
+    </nz-breadcrumb-item>
+
+    <nz-breadcrumb-item>Workshop Details</nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+
+  <!-- Details Card -->
+  <nz-card [nzTitle]="headerTpl">
+
+    <table class="product-info-table">
+
+      <tbody>
+
+        <!-- Title -->
+        <tr>
+          <td>Workshop Title</td>
+          <td>{{ workshop?.title }}</td>
+        </tr>
+
+        <!-- Category -->
+        <tr>
+          <td>Category</td>
+          <td>{{ workshop?.categoryId?.title || 'N/A' }}</td>
+        </tr>
+
+        <!-- Short Description -->
+        <tr>
+          <td>Short Description</td>
+          <td>{{ workshop?.shortDescription }}</td>
+        </tr>
+
+        <!-- Description -->
+        <tr>
+          <td>Description</td>
+          <td>{{ workshop?.description }}</td>
+        </tr>
+
+        <!-- Overview -->
+        <tr>
+          <td>Overview</td>
+          <td>{{ workshop?.overview || 'N/A' }}</td>
+        </tr>
+
+
+        <!-- Includes -->
+        <tr>
+          <td>Includes</td>
+
+          <td>
+
+            <nz-tag
+              *ngFor="let inc of workshop?.includes"
+              nzColor="green"
+              class="m-r-5 m-b-5">
+
+              {{ inc.title }}
+
+            </nz-tag>
+
+            <span *ngIf="!workshop?.includes?.length" class="text-muted">
+              None
+            </span>
+
+          </td>
+        </tr>
+
+
+        <!-- More Details -->
+        <tr>
+          <td>More Details</td>
+
+          <td>
+
+            <div
+              *ngFor="let item of workshop?.moreDetails"
+              style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+
+              <img
+                *ngIf="item.icon"
+                [src]="item.icon"
+                style="width:40px; height:40px; object-fit:cover; border-radius:6px;" />
+
+              <div>
+                <b>{{ item.title }}</b>
+                <div *ngIf="item.description">{{ item.description }}</div>
+              </div>
+
+            </div>
+
+            <span *ngIf="!workshop?.moreDetails?.length" class="text-muted">
+              None
+            </span>
+
+          </td>
+        </tr>
+
+
+        <!-- Status -->
+        <tr>
+          <td>Status</td>
+
+          <td>
+
+            <nz-tag [nzColor]="workshop?.isActive ? 'green' : 'red'">
+              {{ workshop?.isActive ? 'Active' : 'Inactive' }}
+            </nz-tag>
+
+          </td>
+        </tr>
+
+
+        <!-- Show On Homepage -->
+        <tr>
+          <td>Show On Homepage</td>
+
+          <td>
+
+            <nz-tag [nzColor]="workshop?.showOnHomepage ? 'blue' : 'default'">
+              {{ workshop?.showOnHomepage ? 'Yes' : 'No' }}
+            </nz-tag>
+
+          </td>
+        </tr>
+
+
+        <!-- Banner -->
+        <tr>
+          <td>Banner</td>
+          <td>
+            <ng-container *ngIf="bannerUrl; else noBanner">
+              <!-- Video -->
+              <video
+                *ngIf="isBannerVideo"
+                controls
+                width="350"
+                class="banner-video">
+                <source [src]="bannerUrl" type="video/mp4">
+              </video>
+
+              <!-- Image -->
+              <img
+                *ngIf="!isBannerVideo"
+                [src]="bannerUrl"
+                class="banner-img"
+                style="width:350px; max-width:100%; height:200px; object-fit:cover; border-radius:6px;" />
+
+            </ng-container>
+
+            <ng-template #noBanner>
+              <span class="text-muted">No banner available</span>
+            </ng-template>
+
+          </td>
+        </tr>
+
+
+        <tr>
+  <td>Workshop Images</td>
+  <td>
+    <div class="image-grid" *ngIf="workshopImages.length">
+      <div class="image-item" *ngFor="let img of workshopImages" style="display: inline-block; margin: 10px; text-align: center;">
+       
+        <img 
+        [src]="img.url" class="gallery-img"
+        style="width:100%;height:150px;object-fit:cover;border-radius:6px;"
+      />
+     
+        <div class="image-title" style="font-size: 12px; margin-top: 5px; max-width: 150px;">
+          {{ img.title }}
+        </div>
+      </div>
+    </div>
+    <span *ngIf="!workshopImages.length" class="text-muted">No images available</span>
+  </td>
+</tr>
+
+<tr>
+  <td>Journey Images</td>
+  <td>
+    <nz-image-group *ngIf="journeyImages.length">
+      <div class="image-grid">
+      <img *ngFor="let img of journeyImages"
+        [src]="img.url" class="gallery-img"
+        style="width:100%;height:150px;object-fit:cover;border-radius:6px;"
+      />
+      </div>
+    </nz-image-group>
+    <span *ngIf="!journeyImages.length" class="text-muted">None</span>
+  </td>
+</tr>
+
+        <!-- Time Slots -->
+        <tr>
+          <td>Time Slots</td>
+
+          <td>
+
+            <nz-table
+              nzSize="small"
+              nzBordered
+              [nzData]="workshop?.defaultSlots"
+              [nzShowPagination]="false">
+
+              <thead>
+                <tr>
+                  <th>Label</th>
+                  <th>Start</th>
+                  <th>End</th>
+                  <th>Capacity</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                <tr *ngFor="let slot of workshop?.defaultSlots">
+
+                  <td>{{ slot.label }}</td>
+
+                  <td>{{ slot.startTime }}</td>
+
+                  <td>{{ slot.endTime }}</td>
+
+                  <td>
+                    <nz-tag nzColor="blue">
+                      {{ slot.capacity }}
+                    </nz-tag>
+                  </td>
+
+                </tr>
+
+              </tbody>
+
+            </nz-table>
+
+          </td>
+        </tr>
+
+
+        <!-- Pricing Options -->
+        <tr>
+          <td>Pricing Options</td>
+
+          <td>
+
+            <nz-table
+              nzSize="small"
+              nzBordered
+              [nzData]="workshop?.options"
+              [nzShowPagination]="false">
+
+              <thead>
+
+                <tr>
+                  <th>Title</th>
+                  <th>Price</th>
+                  <th>Currency</th>
+                  <th>Price Type</th>
+                </tr>
+
+              </thead>
+
+              <tbody>
+
+                <ng-container *ngFor="let opt of workshop?.options">
+
+                  <tr>
+
+                    <td>{{ opt.title }}</td>
+
+                    <td>{{ opt.price }}</td>
+
+                    <td>{{ opt.currency }}</td>
+
+                    <td>{{ opt.priceDescription }}</td>
+
+                  </tr>
+
+                  <tr>
+
+                    <td colspan="4">
+
+                      <div *ngIf="opt.image" class="m-b-5">
+                        <img
+                          [src]="opt.image"
+                          style="width:100px; height:80px; object-fit:cover; border-radius:6px;" />
+                      </div>
+
+                      <div *ngIf="opt.description" class="m-b-5">
+                        <b>Description:</b> {{ opt.description }}
+                      </div>
+
+                      <b>Inclusions:</b>
+
+                      <ul>
+                        <li *ngFor="let inc of opt.inclusions">
+                          {{ inc }}
+                        </li>
+                        <li *ngIf="!opt.inclusions?.length" class="text-muted">
+                          None
+                        </li>
+                      </ul>
+
+                    </td>
+
+                  </tr>
+
+                </ng-container>
+
+              </tbody>
+
+            </nz-table>
+
+          </td>
+        </tr>
+
+
+        <!-- Non Availability Dates -->
+        <!-- <tr>
+          <td>Non-Availability Dates</td>
+
+          <td>
+
+            <nz-tag
+              *ngFor="let date of workshop?.nonAvailabilityDates"
+              nzColor="purple"
+              class="m-r-5 m-b-5">
+
+              {{ date | date:'dd MMM yyyy' }}
+
+            </nz-tag>
+
+            <span *ngIf="!workshop?.nonAvailabilityDates?.length" class="text-muted">
+              None
+            </span>
+
+          </td>
+        </tr> -->
+
+
+        <!-- Non Availability Days -->
+        <tr>
+          <td>Non-Availability Days</td>
+
+          <td>
+
+            <nz-tag
+              *ngFor="let day of workshop?.nonAvailabilityDays"
+              nzColor="orange"
+              class="m-r-5">
+
+              {{ day }}
+
+            </nz-tag>
+
+            <span *ngIf="!workshop?.nonAvailabilityDays?.length" class="text-muted">
+              None
+            </span>
+
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </nz-card>
+
+
+  <!-- Back Button -->
+  <div class="text-end mt-4">
+
+    <button
+      nz-button
+      nzType="primary"
+      routerLink="/admin/workshops">
+
+      Back
+
+    </button>
+
+  </div>
+
+</nz-card>
+
+
+<ng-template #headerTpl>
+  <div class="card-header-light">
+    <i nz-icon nzType="appstore"></i>
+    Workshop Details
+  </div>
+</ng-template>

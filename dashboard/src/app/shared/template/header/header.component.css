@@ -1,0 +1,21 @@
+/* Container for the logo area */
+.logo a {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Aligns logo to the left of the sidebar */
+    height: 100%;
+}
+
+/* Main Logo sizing - Reducing length here */
+.logo img {
+    max-height: 100px;    /* Keeps the height professional */
+    max-width: 210px;    /* STRICT LIMIT on length */
+    width: auto;         /* Maintains aspect ratio */
+    object-fit: contain; /* Ensures the image isn't squashed */
+}
+
+/* Folded Logo (Collapsed Sidebar) */
+.logo .logo-fold {
+    max-width: 35px;     /* Small square-ish size for collapsed state */
+    max-height: 35px;
+}

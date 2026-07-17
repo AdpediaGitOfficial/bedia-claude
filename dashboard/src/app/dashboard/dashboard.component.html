@@ -1,0 +1,108 @@
+<div class="row">
+    <div class="col-md-6 col-lg-3">
+        <nz-card>
+            <div class="media align-items-center">
+                <nz-avatar [nzSize]="60" nzIcon="account-book" class="ant-avatar-blue"></nz-avatar>
+                <div class="m-l-15">
+                    <h2 class="m-b-0">AED {{currentMonthRevenue | number:'1.2-2'}}</h2>
+                    <p class="m-b-0 text-muted">Current Month Revenue</p>
+                </div>
+            </div>
+        </nz-card>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <nz-card>
+            <div class="media align-items-center">
+                <nz-avatar [nzSize]="50" nzIcon="line-chart" class="ant-avatar-cyan"></nz-avatar>
+                <div class="m-l-15">
+                    <h2 class="m-b-0">{{growthPercentage}}%</h2>
+                    <p class="m-b-0 text-muted">Revenue Growth (vs Last Month)</p>
+                </div>
+            </div>
+        </nz-card>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <nz-card>
+            <div class="media align-items-center">
+                <nz-avatar [nzSize]="50" nzIcon="user" class="ant-avatar-gold"></nz-avatar>
+                <div class="m-l-15">
+                    <h2 class="m-b-0">{{totalUsers}}</h2>
+                    <p class="m-b-0 text-muted">Total Registered Users</p>
+                </div>
+            </div>
+        </nz-card>
+    </div>
+    <div class="col-md-6 col-lg-3">
+        <nz-card>
+            <div class="media align-items-center">
+                <nz-avatar [nzSize]="50" nzIcon="profile" class="ant-avatar-purple"></nz-avatar>
+                <div class="m-l-15">
+                    <h2 class="m-b-0">{{totalBookings}}</h2>
+                    <p class="m-b-0 text-muted">Total Bookings</p>
+                </div>
+            </div>
+        </nz-card>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 col-lg-8">
+        <nz-card>
+            <div class="d-flex justify-content-between align-items-center">
+                <h5>New User Registrations (This Month)</h5>
+            </div>
+            <div class="m-t-50" style="height: 330px">
+                <canvas ngChartjs
+                    [datasets]="revenueChartData"
+                    [labels]="revenueChartLabels"
+                    [options]="revenueChartOptions"
+                    [colors]="revenueChartColors"
+                    [legend]="false"
+                    [chartType]="revenueChartType">
+                </canvas>
+            </div>
+        </nz-card>
+    </div>
+    <div class="col-md-12 col-lg-4">
+        <nz-card>
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Activity This Month</h5>
+            </div>
+            <div class="m-t-30">
+                <div class="d-flex m-b-20">
+                    <div class="text-center">
+                        <nz-avatar nzText="{{newUsersThisMonth}}" class="ant-avatar-blue font-size-20" nzShape="square" nzSize="large"></nz-avatar>
+                    </div>
+                    <div class="m-l-20">
+                        <h5 class="m-b-0">
+                            <a class="text-dark">New Registrations</a>
+                        </h5>
+                        <p class="m-b-0">Users registered this month</p>
+                    </div>
+                </div>
+                <div class="d-flex m-b-20">
+                    <div class="text-center">
+                        <nz-avatar nzText="{{totalOrders}}" class="ant-avatar-cyan font-size-20" nzShape="square" nzSize="large"></nz-avatar>
+                    </div>
+                    <div class="m-l-20">
+                        <h5 class="m-b-0">
+                            <a class="text-dark">Total Orders</a>
+                        </h5>
+                        <p class="m-b-0">All orders placed</p>
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <div class="text-center">
+                        <nz-avatar nzText="{{totalBookings}}" class="ant-avatar-gold font-size-20" nzShape="square" nzSize="large"></nz-avatar>
+                    </div>
+                    <div class="m-l-20">
+                        <h5 class="m-b-0">
+                            <a class="text-dark">Total Bookings</a>
+                        </h5>
+                        <p class="m-b-0">All workshop bookings</p>
+                    </div>
+                </div>
+            </div>
+        </nz-card>
+    </div>
+</div>

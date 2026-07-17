@@ -1,0 +1,122 @@
+<nz-card>
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>
+      <a [routerLink]="'/dashboard/home'">
+        <i nz-icon nzType="home"></i>
+        <span>Home</span>
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <a [routerLink]="'/admin/categories'">
+        <span>Categories</span>
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>Edit Category</nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <div class="row m-b-30">
+    <div class="col-12">
+      <h1 class="page-heading">Edit Category</h1>
+    </div>
+  </div>
+
+  <form nz-form [formGroup]="submitDataForm" nzLayout="vertical" (ngSubmit)="submitForm()">
+
+    <!-- Category Title -->
+    <nz-form-item>
+      <nz-form-label nzRequired>Category Name</nz-form-label>
+      <nz-form-control nzErrorTip="Category name is required">
+        <input nz-input formControlName="title" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Parent Category -->
+    <nz-form-item>
+      <nz-form-label>Parent Category</nz-form-label>
+      <nz-form-control>
+        <nz-select formControlName="parentId" nzAllowClear nzPlaceHolder="Main Category">
+          <nz-option nzLabel="Main Category" [nzValue]="null"></nz-option>
+          <nz-option
+            *ngFor="let cat of categories"
+            [nzLabel]="cat.title"
+            [nzValue]="cat._id">
+          </nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Image Upload -->
+    <input type="file" multiple accept="image/*" (change)="onImagesChange($event)" />
+
+    <!-- Existing Images -->
+    <!-- Existing Images -->
+<div class="preview-wrapper" *ngIf="existingImages.length">
+  <div class="image-box" *ngFor="let img of existingImages; let i = index">
+    <img [src]="img" class="preview-image" />
+    <button
+      type="button"
+      class="remove-btn"
+      nz-button
+      nzType="default"
+      nzDanger
+      nzSize="small"
+      (click)="removeExistingImage(i)">
+      Remove
+    </button>
+  </div>
+</div>
+
+
+    <!-- New Image Previews -->
+    <div class="preview-wrapper">
+      <img
+        *ngFor="let img of imagePreviewUrls"
+        [src]="img"
+        class="preview-image"
+      />
+    </div>
+
+    <div class="text-danger" *ngIf="imageError">
+      {{ imageError }}
+    </div>
+
+    <!-- Description -->
+     <nz-form-item>
+    <nz-form-label>Short Description</nz-form-label>
+    <nz-form-control>
+      <textarea nz-input formControlName="shortDescription"></textarea>
+    </nz-form-control>
+  </nz-form-item>
+    <nz-form-item>
+      <nz-form-label>Description</nz-form-label>
+      <nz-form-control>
+        <textarea nz-input formControlName="description"></textarea>
+      </nz-form-control>
+    </nz-form-item>
+
+
+    <!-- Status -->
+    <nz-form-item>
+      <nz-form-label>Status</nz-form-label>
+      <nz-form-control>
+        <nz-radio-group formControlName="isActive">
+          <label nz-radio-button [nzValue]="true">Active</label>
+          <label nz-radio-button [nzValue]="false">Inactive</label>
+        </nz-radio-group>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+    <nz-form-label>Show on Homepage</nz-form-label>
+    <nz-form-control>
+      <nz-radio-group formControlName="showOnHomepage">
+        <label nz-radio-button [nzValue]="true">Yes</label>
+        <label nz-radio-button [nzValue]="false">No</label>
+      </nz-radio-group>
+    </nz-form-control>
+  </nz-form-item>
+
+
+    <button nz-button nzType="primary">Update</button>
+  </form>
+</nz-card>

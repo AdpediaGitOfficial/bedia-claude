@@ -1,0 +1,126 @@
+<nz-card>
+
+  <!-- Breadcrumb -->
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>
+      <a routerLink="/dashboard/home">
+        <i nz-icon nzType="home"></i>
+        <span>Home</span>
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>Workshops</nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <!-- Header -->
+  <div class="row m-b-20">
+    <div class="col-md-6">
+      <h1 class="page-heading">Workshops</h1>
+    </div>
+    <div class="col-md-6 text-right">
+      <a nz-button nzType="primary" routerLink="/admin/workshop-add">
+        <i nz-icon nzType="plus"></i>
+        Add Workshop
+      </a>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <nz-table
+    [nzData]="displayData"
+    [nzBordered]="true"
+    [nzLoading]="loading"
+    [nzShowPagination]="false">
+
+    <thead>
+      <tr>
+        <th>SI.No.</th>
+        <th>Workshop</th>
+        <th>Category</th>
+        <th>Status</th>
+        <th style="width: 180px">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let item of displayData; let i = index">
+
+        <!-- SI NO -->
+        <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
+
+        <!-- WORKSHOP -->
+        <td>
+          <div class="d-flex align-items-center">
+            <!-- <nz-avatar
+              nzShape="square"
+              [nzSize]="60"
+              nzIcon="picture"
+              [nzSrc]="item.bannerImage || null">
+            </nz-avatar> -->
+            <div class="m-l-10">
+              <div class="fw-semibold">{{ item.title }}</div>
+              <small class="text-muted">
+                {{ item.defaultSlots?.length || 0 }} Slots
+              </small>
+            </div>
+          </div>
+        </td>
+
+        <!-- CATEGORY -->
+        <td>{{ item.categoryId?.title || '-' }}</td>
+
+        <!-- STATUS -->
+        <td>
+          <nz-badge
+            [nzStatus]="item.isActive ? 'success' : 'error'">
+          </nz-badge>
+          <span class="m-l-5">
+            {{ item.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </td>
+
+        <!-- ACTIONS -->
+        <td>
+          <a nz-button nzShape="circle"
+             nz-tooltip nzTooltipTitle="View"
+             [routerLink]="['/admin/workshop-detail', item._id]">
+            <i nz-icon nzType="eye"></i>
+          </a>
+
+          <a nz-button nzShape="circle"
+             nz-tooltip nzTooltipTitle="Edit"
+             [routerLink]="['/admin/workshop-edit', item._id]">
+            <i nz-icon nzType="edit"></i>
+          </a>
+
+          <button nz-button nzShape="circle"
+                  nz-tooltip nzTooltipTitle="Delete"
+                  (click)="deleteItem(item._id)">
+            <i nz-icon nzType="delete"></i>
+          </button>
+        </td>
+
+      </tr>
+
+      <!-- No Data -->
+      <tr *ngIf="!displayData.length && !loading">
+        <td colspan="5" class="text-center text-muted">
+          No workshops found
+        </td>
+      </tr>
+
+    </tbody>
+  </nz-table>
+
+  <!-- Pagination -->
+  
+<div class="pagination-wrapper">
+  <nz-pagination
+    [(nzPageIndex)]="pageIndex"
+    [nzPageSize]="pageSize"
+    [nzTotal]="total"
+    (nzPageIndexChange)="onPageChange($event)">
+  </nz-pagination>
+</div>
+
+
+</nz-card>

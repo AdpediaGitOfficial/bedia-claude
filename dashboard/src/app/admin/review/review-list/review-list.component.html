@@ -1,0 +1,87 @@
+<nz-card>
+    <nz-breadcrumb>
+      <nz-breadcrumb-item>
+        <a [routerLink]="'/dashboard/home'">
+          <i nz-icon nzType="home" theme="outline"></i>
+          <span>Home</span>
+        </a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>Reviews</nz-breadcrumb-item>
+    </nz-breadcrumb>   
+    <div class="row m-b-30">
+      <div class="col-8">
+        <h1 class="page-heading">Reviews</h1>
+      </div>
+      <div class="col-lg-4 text-right">
+            <a nz-button nzType="primary"  [nzLoading]="isSyncing" (click)="syncReviews()">
+              <i nz-icon nzType="sync" theme="outline"></i>
+              <span>Sync Recent Reviews</span>
+            </a>         
+        </div>        
+    </div>
+    <nz-table #listTable [nzData]="displayData" [nzBordered]="true" [nzShowPagination]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let column of orderColumn" [nzSortFn]="column.compare">
+            {{ column.title }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of displayData; let i = index">
+          <td>{{ (pageIndex - 1) * pageSize + (i + 1) }}</td>  
+          <td>
+            <div class="d-flex align-items-center">
+              <nz-avatar
+                nzShape="square"
+                [nzSize]="60"
+                nzIcon="picture"
+                [nzSrc]="apiUrl+ item.profilePhotoUrl"
+              ></nz-avatar>
+              <span class="m-l-10">{{ item.authorName }}</span>
+            </div>
+          </td>
+          <td>{{ item.rating }} </td>
+          <td>{{ item.text }}</td>
+          <td>{{ item.reviewTime * 1000 | date:'dd/MM/yyyy hh:mm a' }}</td>
+          <td>
+            <nz-badge
+              [nzStatus]="item.isActive ? 'success' : 'error'">
+            </nz-badge>
+            <span class="m-l-5">
+              {{ item.isActive ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td>
+    <div class="d-flex gap-2">
+      <button 
+        nz-button 
+        nzSize="small"
+        [nzType]="item.isActive ? 'primary' : 'default'"
+        [nzDanger]="!item.isActive"
+        (click)="toggleStatus(item._id, item.isActive)"
+        nz-tooltip
+        [nzTooltipTitle]="item.isActive ? 'Deactivate Review' : 'Activate Review'">
+
+        <i nz-icon [nzType]="item.isActive ? 'eye-invisible' : 'eye'"></i>
+      </button>
+
+
+      <button 
+        nz-button 
+        nzSize="small" 
+        nzType="default" 
+        nzDanger 
+        (click)="deleteItem('/reviews', item._id)">
+        <i nz-icon nzType="delete"></i>
+      </button>
+    </div>
+  </td>
+        </tr>
+      </tbody>
+    </nz-table>
+    <div class="pagination-container">
+      <nz-pagination [(nzPageIndex)]="pageIndex" [nzPageSize]="pageSize" [nzTotal]="total" (nzPageIndexChange)="onPageChange($event)"></nz-pagination>  
+    </div>
+  </nz-card>
+  

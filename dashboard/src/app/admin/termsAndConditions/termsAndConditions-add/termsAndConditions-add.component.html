@@ -1,0 +1,80 @@
+<nz-card>
+  <!-- Breadcrumb -->
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>
+      <a routerLink="/dashboard/home">
+        <i nz-icon nzType="home"></i>
+        Home
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <a routerLink="/admin/termsAndConditions">Terms & Conditions</a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>Add Terms & Conditions</nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <!-- Heading -->
+  <div class="row m-b-30">
+    <div class="col-12">
+      <h1 class="page-heading">Add Terms & Conditions</h1>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <form
+    nz-form
+    nzLayout="vertical"
+    [formGroup]="submitDataForm"
+    (ngSubmit)="submitForm()"
+  >
+    <div class="row">
+      <!-- Title -->
+      <div class="col-md-6 m-b-10">
+        <nz-form-item>
+          <nz-form-label nzRequired>Title</nz-form-label>
+          <nz-form-control nzErrorTip="Title is required">
+            <input nz-input formControlName="title" placeholder="Title" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <!-- Status -->
+      <div class="col-md-6 m-b-10">
+        <nz-form-item>
+          <nz-form-label>Status</nz-form-label>
+          <nz-form-control>
+            <nz-radio-group formControlName="isActive">
+              <label nz-radio-button [nzValue]="true">Active</label>
+              <label nz-radio-button [nzValue]="false">Inactive</label>
+            </nz-radio-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <nz-form-item>
+      <nz-form-label nzRequired>Content</nz-form-label>
+      <nz-form-control nzErrorTip="Content is required">
+        <!-- <editor
+          apiKey="tinyApiKey"
+          formControlName="content"
+          [init]="tinyConfig"
+        ></editor> -->
+        <textarea
+          nz-input
+          rows="5"
+          placeholder="Enter content"
+          formControlName="content">
+        </textarea>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Submit -->
+    <div class="d-flex justify-content-end mt-4">
+      <button nz-button nzType="primary" [nzLoading]="isSubmitting">
+        Submit
+      </button>
+    </div>
+  </form>
+</nz-card>

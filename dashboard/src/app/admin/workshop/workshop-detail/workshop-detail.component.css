@@ -1,0 +1,146 @@
+.image-preview {
+    display: flex;
+    justify-content: center; 
+    align-items: center;    
+    height: 200px;          
+    width: 200px;           
+    border: 1px solid #ddd; 
+    background-color: #f9f9f9;
+    border-radius: 8px;     
+    overflow: hidden;       
+}
+.preview-img {
+    max-width: 100%; 
+    max-height: 100%;
+}
+/* page card */
+
+.page-card {
+  border-radius: 10px;
+}
+
+/* details card */
+
+.details-card {
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+/* header */
+
+.card-header-light {
+  background: #f0f5ff;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* info table */
+
+.product-info-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.product-info-table td {
+  padding: 12px 8px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.product-info-table td:first-child {
+  width: 220px;
+  font-weight: 600;
+  color: #555;
+}
+
+/* title row highlight */
+
+.title-row td {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1890ff;
+}
+
+/* images */
+
+.banner-img {
+  width: 220px;
+  border-radius: 8px;
+}
+
+.gallery-img {
+  width: 120px;
+  margin-right: 10px;
+  border-radius: 6px;
+}
+
+/* price */
+
+.price-cell {
+  font-weight: 600;
+  color: #1890ff;
+}
+
+/* spacing helpers */
+
+.m-r-5 {
+  margin-right: 5px;
+}
+
+.m-b-5 {
+  margin-bottom: 5px;
+}
+
+.text-muted {
+  color: #999;
+}
+.banner-img{
+width:300px;
+border-radius:8px;
+}
+
+.banner-video{
+width:350px;
+border-radius:8px;
+}
+
+.product-info-table td{
+padding:12px;
+vertical-align:top;
+}
+
+
+/* Ensure the grid container allows items to show */
+.image-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 10px 0;
+}
+
+.image-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Force the image to be visible */
+.gallery-img {
+    width: 150px !important;
+    height: 150px !important;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #f0f0f0;
+    display: block !important;
+}
+
+/* Make sure the Ng-Zorro component itself has size */
+::ng-deep .ant-image {
+    display: inline-block;
+    width: 150px;
+    height: 150px;
+}

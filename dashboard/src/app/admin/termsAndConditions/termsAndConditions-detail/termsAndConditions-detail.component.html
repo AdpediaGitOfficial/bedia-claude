@@ -1,0 +1,74 @@
+<nz-card>
+  <!-- Breadcrumb -->
+  <nz-breadcrumb class="mb-4">
+    <nz-breadcrumb-item>
+      <a routerLink="/dashboard/home">
+        <i nz-icon nzType="home"></i>
+        Home
+      </a>
+    </nz-breadcrumb-item>
+
+    <nz-breadcrumb-item>
+      <a routerLink="/admin/termsAndConditions">
+        Terms & Conditions
+      </a>
+    </nz-breadcrumb-item>
+
+    <nz-breadcrumb-item>Details</nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <!-- Title + Action -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">{{ displayDetails?.title }}</h2>
+
+    <nz-tag [nzColor]="displayDetails?.isActive ? 'green' : 'red'">
+      {{ displayDetails?.isActive ? 'Active' : 'Inactive' }}
+    </nz-tag>
+  </div>
+
+  <!-- Content -->
+  <nz-card nzTitle="Content" class="shadow-sm">
+    <div class="content-box">
+      {{ displayDetails?.content }}
+    </div>
+  </nz-card>
+
+  <!-- Meta Info -->
+  <nz-card class="shadow-sm mt-3" nzTitle="Information">
+    <div class="row">
+      <div class="col-md-6">
+        <p>
+          <strong>Created At :</strong>
+          {{ displayDetails?.createdAt | date: 'medium' }}
+        </p>
+      </div>
+
+      <div class="col-md-6">
+        <p>
+          <strong>Updated At :</strong>
+          {{ displayDetails?.updatedAt | date: 'medium' }}
+        </p>
+      </div>
+    </div>
+  </nz-card>
+
+  <!-- Buttons -->
+  <div class="text-end mt-4">
+    <button
+      nz-button
+      nzType="default"
+      routerLink="/admin/termsAndConditions"
+      class="me-2"
+    >
+      Back
+    </button>
+
+    <button
+      nz-button
+      nzType="primary"
+      [routerLink]="['/admin/termsAndConditions-edit', displayDetails?._id]"
+    >
+      Edit
+    </button>
+  </div>
+</nz-card>

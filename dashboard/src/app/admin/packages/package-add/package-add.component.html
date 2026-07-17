@@ -1,0 +1,183 @@
+<nz-card>    
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>
+      <a [routerLink]="'/dashboard/home'">
+        <i nz-icon nzType="home" theme="outline"></i>
+        <span>Home</span>
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <a [routerLink]="'/admin/packages'">
+        <span>Packages</span>
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>Add Package</nz-breadcrumb-item>
+  </nz-breadcrumb>    
+  <div class="row m-b-30 align-items-center">
+    <div class="col-lg-8 d-flex align-items-center">
+      <h1 class="page-heading ml-2 mb-0">Add Package</h1>
+    </div>
+  </div>
+
+    <form
+      nz-form
+      [formGroup]="submitDataForm"
+      class="login-form"
+      nzLayout="vertical"
+      (ngSubmit)="submitForm()"
+    >    
+      <div class="col-lg-12">
+        <div class="d-md-flex">
+          <div class="col-md-4 m-b-10 m-r-10">
+            <nz-form-item>
+              <nz-form-label nzRequired nzFor="packageName">Package Name</nz-form-label>
+              <nz-form-control nzErrorTip="Please input Package Name!">
+                <input
+                  type="text"
+                  nz-input
+                  formControlName="packageName"
+                  placeholder="Package Name"
+                  id="packageName"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div class="col-md-4 m-b-10 m-r-10">
+            <nz-form-item>
+              <nz-form-label nzRequired nzFor="ageFrom">Age From</nz-form-label>
+              <nz-form-control nzErrorTip="Please input Age From!">
+                <input
+                  type="number"
+                  nz-input
+                  formControlName="ageFrom"
+                  placeholder="Age From"
+                  id="ageFrom"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div class="col-md-4 m-b-10 m-r-10">
+            <nz-form-item>
+              <nz-form-label nzRequired nzFor="ageTo">Age To</nz-form-label>
+              <nz-form-control nzErrorTip="Please input Age To!">
+                <input
+                  type="number"
+                  nz-input
+                  formControlName="ageTo"
+                  placeholder="Age To"
+                  id="ageTo"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12">
+        <div class="d-md-flex">
+          <div class="col-md-8 m-b-10 m-r-10">
+            <nz-form-item>
+              <nz-form-label nzFor="description">Description</nz-form-label>
+              <textarea nz-input id="description" formControlName="description" class="form-control"
+                placeholder="Enter description"></textarea>
+            </nz-form-item>
+          </div>
+          <div class="col-md-4 m-b-10 m-r-10">
+            <nz-form-item>
+              <nz-form-label nzRequired nzFor="isActive">Status</nz-form-label>
+              <nz-radio-group id="isActive" formControlName="isActive" [(ngModel)]="isActive">
+                <label nz-radio-button nzValue="true">Active</label>
+                <label nz-radio-button nzValue="false">Inactive</label>
+              </nz-radio-group>
+            </nz-form-item>
+          </div>
+        </div>
+      </div>       
+      <div class="col-lg-12">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Price</th>
+              <th>Validity (days)</th>
+              <th>From</th>
+              <th>To</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody formArrayName="packageCosts">            
+            <tr *ngFor="let cost of packageCosts.controls; let i = index" [formGroupName]="i">
+              <td>
+                <nz-form-item>
+                  <nz-form-control nzErrorTip="Please input Price!" >
+                    <input
+                      type="number"
+                      nz-input
+                      formControlName="price"
+                      placeholder="Price"
+                    />
+                  </nz-form-control>
+                </nz-form-item>
+              </td>
+              <td>
+                <nz-form-item>
+                  <nz-form-control nzErrorTip="Please input Validity!">
+                    <input
+                      type="number"
+                      nz-input
+                      formControlName="validity"
+                      placeholder="Validity"
+                    />
+                  </nz-form-control>
+                </nz-form-item>
+              </td>
+              <td>
+                <nz-form-item>
+                  <nz-form-control nzErrorTip="Please input start date!">
+                    <input
+                      type="date"
+                      nz-input
+                      formControlName="from"
+                    />
+                  </nz-form-control>
+                </nz-form-item>
+              </td>
+              <td>
+                <nz-form-item>
+                  <nz-form-control nzErrorTip="Please input end date!">
+                    <input
+                      type="date"
+                      nz-input
+                      formControlName="to"
+                    />
+                  </nz-form-control>
+                </nz-form-item>
+              </td>
+              <td>
+                <nz-form-item>
+                <button title="Remove"
+                  *ngIf="i > 0"
+                  nz-button
+                  nzDanger
+                  (click)="removePackageCost(i)" 
+                >
+                  -
+                </button>
+              </nz-form-item>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="text-end">
+          <button nz-button nzType="primary" nzGhost (click)="addPackageCost()" title="Add More">Add More</button>
+        </div>       
+      </div>
+  
+      <div class="d-flex align-items-center justify-content-between">
+        <div></div> 
+        <nz-form-item>
+          <nz-form-control>
+            <button nz-button class="form-button" [nzType]="'primary'">Submit</button>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </form>
+  </nz-card>

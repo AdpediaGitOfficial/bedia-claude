@@ -1,0 +1,88 @@
+<nz-card>
+  <!-- Breadcrumb -->
+  <nz-breadcrumb class="mb-4">
+    <nz-breadcrumb-item>
+      <a [routerLink]="'/dashboard/home'">
+        <i nz-icon nzType="home" theme="outline"></i>
+        <span>Home</span>
+      </a>
+    </nz-breadcrumb-item>
+
+    <nz-breadcrumb-item>
+      <a [routerLink]="'/admin/categories'">
+        <span>Categories</span>
+      </a>
+    </nz-breadcrumb-item>
+
+    <nz-breadcrumb-item>Category Details</nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <!-- Details Card -->
+  <nz-card nzTitle="Category Details" class="shadow-sm p-3 rounded-card">
+
+    <table class="product-info-table m-t-20">
+      <tbody>
+
+        <!-- Category Name -->
+        <tr>
+          <td>Category Name:</td>
+          <td class="text-dark font-weight-semibold">
+            {{ dislayDetails?.title }}
+          </td>
+        </tr>
+
+        <!-- Parent Category -->
+        <tr>
+          <td>Parent Category:</td>
+          <td>
+            {{ dislayDetails?.parentId?.title || 'Main Category' }}
+          </td>
+        </tr>
+
+        <!-- Images -->
+        <tr>
+          <td>Images:</td>
+          <td>
+            <div class="d-flex flex-wrap gap-2">
+              <img
+                *ngFor="let img of dislayDetails?.image"
+                [src]="img"
+                class="img-thumbnail"
+                style="width: 120px; height: auto"
+              />
+              <span *ngIf="!dislayDetails?.image?.length">No Images</span>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Description -->
+        <tr>
+          <td>Description:</td>
+          <td>{{ dislayDetails?.description || 'N/A' }}</td>
+        </tr>
+
+        <!-- Status -->
+        <tr>
+          <td>Status:</td>
+          <td>
+            <nz-tag [nzColor]="dislayDetails?.isActive ? 'green' : 'red'">
+              {{ dislayDetails?.isActive ? 'Active' : 'Inactive' }}
+            </nz-tag>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+
+  </nz-card>
+
+  <!-- Back Button -->
+  <div class="text-end m-t-20">
+    <button
+      nz-button
+      nzType="primary"
+      [routerLink]="'/admin/categories'">
+      Back
+    </button>
+  </div>
+</nz-card>

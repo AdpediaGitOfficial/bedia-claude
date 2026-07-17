@@ -1,0 +1,82 @@
+<nz-card > 
+    <nz-breadcrumb class="mb-4">
+      <nz-breadcrumb-item>
+        <a [routerLink]="'/dashboard/home'">
+          <i nz-icon nzType="home" theme="outline"></i>
+          <span>Home</span>
+        </a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a [routerLink]="'/admin/packages'">
+          <span>Packages</span>
+        </a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>Package Details</nz-breadcrumb-item>
+    </nz-breadcrumb>
+    <nz-card nzTitle="Package Details" class="shadow-sm p-3 rounded-card">  
+        <table class="product-info-table m-t-20">
+            <tbody>
+                <tr>
+                    <td>Package Name:</td>
+                    <td class="text-dark font-weight-semibold">{{ packageDetails.packageName }}</td>
+                </tr>
+                <tr>
+                    <td>Age Range:</td>
+                    <td>{{ packageDetails.ageFrom }} - {{ packageDetails.ageTo }} years</td>
+                </tr>
+                <tr>
+                    <td>Description:</td>
+                    <td>{{ packageDetails.description || 'N/A' }}</td>
+                </tr>
+                <tr>
+                    <td>Status:</td>
+                    <td>
+                        <nz-tag [nzColor]="packageDetails.isActive ? 'green' : 'red'">
+                            {{ packageDetails.isActive ? 'Active' : 'Inactive' }}
+                        </nz-tag>
+                    </td>
+                </tr>
+            </tbody>
+        </table> 
+    </nz-card>    
+    <nz-card nzTitle="Package Cost Details" class="shadow-sm p-3 rounded-card">  
+        <nz-table
+        #basicTable
+        [nzBordered]="true"
+        [nzData]="packageDetails.packageCosts"
+        [nzSize]="'middle'"
+        [nzBordered]="true"
+        [nzShowPagination]="false"
+        [nzBordered]="true"
+        >
+        <thead>
+          <tr>
+            <th>Price(₹)</th>
+            <th>Validity (days)</th>
+            <th>From</th>
+            <th>To</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cost of packageDetails.packageCosts">
+            <td>{{ cost.price }}</td>
+            <td>{{ cost.validity }}</td>
+            <td>{{ cost.from | date: 'mediumDate' }}</td>
+            <td>{{ cost.to | date: 'mediumDate' }}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>   
+  
+    <div class="text-end m-t-20">
+      <button
+        nz-button
+        nzType="primary"
+        [routerLink]="'/admin/packages'"
+        title="Back to List"
+      >
+        Back
+      </button>
+    </div>
+  </nz-card>
+  

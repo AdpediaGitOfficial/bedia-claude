@@ -1,0 +1,13 @@
+.selected-package {
+    border: 2px solid #1890ff; /* Blue border for selection */
+    background-color: #e6f7ff; /* Light blue background */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for emphasis */
+    transition: all 0.3s ease-in-out; /* Smooth transition effect */
+  }
+  .nz-card:hover {
+    border: 1px solid #40a9ff;
+    background-color: #f0f5ff;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+    

@@ -1,0 +1,43 @@
+<nz-card>
+    <nz-breadcrumb>
+      <nz-breadcrumb-item>
+        <a [routerLink]="'/dashboard/home'">
+          <i nz-icon nzType="home" theme="outline"></i>
+          <span>Home</span>
+        </a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>Offline Payments</nz-breadcrumb-item>
+    </nz-breadcrumb>   
+    <div class="row m-b-30">
+      <div class="col-8">
+        <h1 class="page-heading">Offline Payments</h1>
+      </div>
+    </div>
+    <nz-table #listTable [nzData]="displayData" [nzBordered]="true" [nzShowPagination]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let column of orderColumn" [nzSortFn]="column.compare">
+            {{ column.title }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of displayData; let i = index">
+          <td>{{ (pageIndex - 1) * pageSize + (i + 1) }}</td>  
+          <td>{{ item.studentId.fullName }} </td>
+          <td>{{ item.packageId.packageName }} </td>
+          <td>{{ item.paymentId.amount }}</td>
+          <td>{{ item.createdAt  | date: 'mediumDate' }}</td>
+          <td >           
+            <a class="m-r-5" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="View" [routerLink]="['/admin/offlinepayment-detail', item._id]">
+              <i nz-icon nzType="eye" theme="outline"></i>
+            </a>            
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+    <div class="pagination-container">
+      <nz-pagination [(nzPageIndex)]="pageIndex" [nzPageSize]="pageSize" [nzTotal]="total" (nzPageIndexChange)="onPageChange($event)"></nz-pagination>  
+    </div>
+  </nz-card>
+  

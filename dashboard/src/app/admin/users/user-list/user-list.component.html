@@ -1,0 +1,150 @@
+<nz-card>
+    <nz-breadcrumb>
+      <nz-breadcrumb-item>
+        <a [routerLink]="'/dashboard/home'">
+          <i nz-icon nzType="home" theme="outline"></i>
+          <span>Home</span>
+        </a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>Users</nz-breadcrumb-item>
+    </nz-breadcrumb>   
+    <div class="row m-b-30">
+      <div class="col-12">
+        <h1 class="page-heading">Users</h1>        
+      </div>  
+
+      <div class="col-lg-12">
+        <div class="d-md-flex">
+          <div class="m-b-10 m-r-20">
+            <nz-form-item>
+              <nz-form-label nzFor="name">Search by Name/Mobile</nz-form-label>            
+              <nz-input-group [nzPrefix]="prefixTemplate">
+                <input
+                  type="text"
+                  nz-input
+                  placeholder="Name/Mobile"
+                  [(ngModel)]="searchInput"
+                  (ngModelChange)="search()" class="custom-search-input"
+                />
+              </nz-input-group>
+              <ng-template #prefixTemplate>
+                <i nz-icon nzType="search" class="opacity-05"></i>
+              </ng-template>
+            </nz-form-item>   
+          </div>
+          <div class="m-b-10 m-r-20 d-flex align-items-center">
+            <nz-form-item>
+              <nz-form-label nzFor="Subscription">Subscription</nz-form-label>
+              <nz-select
+              style="min-width: 220px;"
+              class="w-100"
+              nzPlaceHolder="Category"
+              [(ngModel)]="selectedSubscription"
+              (ngModelChange)="subscriptionChange($event)"
+            >
+              <nz-option nzLabel="All" nzValue="All"></nz-option>
+              <nz-option nzLabel="Subscribed" nzValue="true"></nz-option>
+              <nz-option nzLabel="Free User" nzValue="false"></nz-option>
+            </nz-select>
+            </nz-form-item>            
+          </div>
+          <div class="m-b-10 m-r-20 d-flex align-items-center">
+            <nz-form-item>
+              <nz-form-label nzFor="status">Status</nz-form-label>            
+              <nz-select
+                style="min-width: 220px;"
+                class="w-100"
+                nzPlaceHolder="Status"
+                [(ngModel)]="selectedStatus"
+                (ngModelChange)="statusChange($event)"
+              >
+                <nz-option nzLabel="All" nzValue="All"></nz-option>
+                <nz-option nzLabel="Active" nzValue="true"></nz-option>
+                <nz-option nzLabel="Inactive" nzValue="false"></nz-option>
+              </nz-select>
+            </nz-form-item>   
+          </div>
+          <div class="m-b-10 m-r-20 d-flex align-items-center">
+            <nz-form-item>
+              <nz-form-label nzFor="date">Date</nz-form-label>            
+              <nz-range-picker
+                [(ngModel)]="dateRange"
+                (ngModelChange)="onDateRangeChange()"
+                [nzFormat]="'dd-MM-yyyy'"
+                style="width: 100%; min-width: 250px;"
+              ></nz-range-picker>
+            </nz-form-item>   
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <nz-table #listTable [nzData]="displayData" [nzBordered]="true" [nzShowPagination]="false">
+      <thead>
+        <tr>
+          <th *ngFor="let column of orderColumn" [nzSortFn]="column.compare">
+            {{ column.title }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of displayData; let i = index">
+          <td>{{ (pageIndex - 1) * pageSize + (i + 1) }}</td> 
+           <td>
+            <div class="d-flex align-items-center">
+              <nz-avatar
+                nzShape="square"
+                [nzSize]="60"
+                nzIcon="picture"
+                [nzSrc]="item.avatar"
+              ></nz-avatar>
+              <span class="m-l-10">{{ item.fullName }}</span>
+            </div>
+          </td>          
+          <td>{{ item.createdAt | date:'dd-MM-yyyy' : 'UTC' }}</td>
+          <td>{{ item.mobileNumber }}</td>          
+          <td>{{ item.email }}</td>
+          <td>
+            <nz-badge
+              *ngIf="item.isActive === true"
+              nzStatus="success"
+            ></nz-badge>
+            <nz-badge
+              *ngIf="item.isActive === false"
+              nzStatus="error"
+            ></nz-badge>
+            <span class="text-capitalize">{{ item.isActive ? 'Active' : 'Inactive' }}</span>
+          </td>
+          <td>
+              <a class="m-r-5" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="View" [routerLink]="['/admin/user-detail', item._id]">
+                <i nz-icon nzType="eye" theme="outline"></i>
+              </a>
+
+              <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Delete" (click)="deleteItem('/user', item._id)">
+                <i nz-icon nzType="delete" theme="outline"></i>
+            </button>
+            <button *ngIf="item.subscribed && !isExpired(item.subscriptionEndDate)" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Unsubscribe" (click)="unSubscribeStudent('/api/student/unsubscribe', item._id)">
+              <i nz-icon nzType="stop" theme="outline"></i>
+            </button>             
+            
+          </td>          
+        </tr>
+      </tbody>
+    </nz-table>
+    <div class="pagination-container">
+      <div class="export-button">
+        <button
+          nz-button
+          nzType="primary" (click)="exportUsers()"
+          title="Export to Excel"
+        >
+        <i nz-icon nzType="export" nzTheme="outline"></i>
+        Export to Excel
+        </button>
+      </div>
+      <div class="pagination-content">
+        <nz-pagination [(nzPageIndex)]="pageIndex" [nzPageSize]="pageSize" [nzTotal]="total" (nzPageIndexChange)="onPageChange($event)"></nz-pagination>  
+      </div>  
+    </div>  
+  </nz-card>
+  

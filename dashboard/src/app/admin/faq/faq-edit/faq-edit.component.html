@@ -1,0 +1,89 @@
+<nz-card>
+
+  <!-- Breadcrumb -->
+  <nz-breadcrumb class="mb-3">
+    <nz-breadcrumb-item>
+      <a routerLink="/dashboard/home">
+        <i nz-icon nzType="home"></i> Home
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <a routerLink="/admin/faqs">FAQs</a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>Edit FAQ</nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <h1 class="page-heading mb-4">Edit FAQ</h1>
+
+  <form
+    nz-form
+    nzLayout="vertical"
+    [formGroup]="editForm"
+    (ngSubmit)="submitForm()"
+  >
+
+    <div class="row">
+
+      <!-- Question -->
+      <div class="col-md-6">
+        <nz-form-item>
+          <nz-form-label nzRequired>Question</nz-form-label>
+          <nz-form-control nzErrorTip="Question is required">
+            <input
+              nz-input
+              formControlName="question"
+              placeholder="Enter FAQ question"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <!-- Category -->
+      <div class="col-md-6">
+        <nz-form-item>
+          <nz-form-label>Category</nz-form-label>
+          <nz-form-control>
+            <input
+              nz-input
+              formControlName="category"
+              placeholder="Optional category"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+    </div>
+
+    <!-- Answer -->
+    <nz-form-item>
+      <nz-form-label nzRequired>Answer</nz-form-label>
+      <nz-form-control nzErrorTip="Answer is required">
+        <textarea
+          nz-input
+          rows="4"
+          formControlName="answer"
+          placeholder="Enter FAQ answer"
+        ></textarea>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Status -->
+    <nz-form-item>
+      <nz-form-label>Status</nz-form-label>
+      <nz-form-control>
+        <nz-radio-group formControlName="isActive">
+          <label nz-radio-button [nzValue]="true">Active</label>
+          <label nz-radio-button [nzValue]="false">Inactive</label>
+        </nz-radio-group>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Actions -->
+    <div class="d-flex justify-content-end mt-4">
+      <button nz-button nzType="primary" [nzLoading]="isSubmitting">
+        Update FAQ
+      </button>
+    </div>
+
+  </form>
+</nz-card>

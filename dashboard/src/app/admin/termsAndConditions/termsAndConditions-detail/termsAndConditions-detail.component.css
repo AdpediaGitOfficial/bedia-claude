@@ -1,0 +1,8 @@
+.content-box {
+  background: #fafafa;
+  padding: 16px;
+  border-radius: 6px;
+  max-height: 300px;
+  overflow-y: auto;
+  white-space: pre-line;
+}

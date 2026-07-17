@@ -1,0 +1,74 @@
+<nz-table [nzData]="displayData" [nzBordered]="true" [nzShowPagination]="false">
+  <thead>
+    <tr>
+      <th>SI.No.</th>
+      <th>Category</th>
+      <th>Parent</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let item of displayData; let i = index">
+      <!-- SI NO -->
+      <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
+
+      <!-- CATEGORY -->
+      <td>
+        <div class="d-flex align-items-center">
+          <nz-avatar
+            nzShape="square"
+            [nzSize]="60"
+            nzIcon="picture"
+            [nzSrc]="item.image?.length ? item.image[0] : null">
+          </nz-avatar>
+          <span class="m-l-10">{{ item.title }}</span>
+        </div>
+      </td>
+
+      <!-- PARENT -->
+      <td>
+         {{ item.parentName }}
+      </td>
+
+      <!-- STATUS -->
+      <td>
+        <nz-badge
+          [nzStatus]="item.isActive ? 'success' : 'error'">
+        </nz-badge>
+        <span class="m-l-5">
+          {{ item.isActive ? 'Active' : 'Inactive' }}
+        </span>
+      </td>
+
+      <!-- ACTIONS -->
+      <td>
+        <a nz-button nzShape="circle" nz-tooltip nzTooltipTitle="View"
+           [routerLink]="['/admin/category-detail', item._id]">
+          <i nz-icon nzType="eye"></i>
+        </a>
+
+        <a nz-button nzShape="circle" nz-tooltip nzTooltipTitle="Edit"
+           [routerLink]="['/admin/category-edit', item._id]">
+          <i nz-icon nzType="edit"></i>
+        </a>
+
+        <button nz-button nzShape="circle" nz-tooltip nzTooltipTitle="Delete"
+                (click)="deleteItem(item._id)">
+          <i nz-icon nzType="delete"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<div class="pagination-wrapper">
+  <nz-pagination
+    [(nzPageIndex)]="pageIndex"
+    [nzPageSize]="pageSize"
+    [nzTotal]="total"
+    (nzPageIndexChange)="onPageChange($event)">
+  </nz-pagination>
+</div>
+

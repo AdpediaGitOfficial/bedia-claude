@@ -1,0 +1,126 @@
+<nz-card>
+
+  <!-- Breadcrumb -->
+  <nz-breadcrumb class="mb-3">
+    <nz-breadcrumb-item>
+      <a routerLink="/dashboard/home">
+        <i nz-icon nzType="home"></i> Home
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <a routerLink="/admin/galleries">Galleries</a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>Edit Gallery</nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <h1 class="page-heading mb-4">Edit Gallery</h1>
+
+  <form nz-form nzLayout="vertical" [formGroup]="editForm" (ngSubmit)="submitForm()">
+
+    <!-- BASIC DETAILS -->
+    <div class="row">
+      <div class="col-md-6">
+        <nz-form-item>
+          <nz-form-label nzRequired>Gallery Title</nz-form-label>
+          <nz-form-control nzErrorTip="Title is required">
+            <input nz-input formControlName="title" placeholder="Gallery title" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div class="col-md-6">
+        <nz-form-item>
+          <nz-form-label>Status</nz-form-label>
+          <nz-form-control>
+            <nz-radio-group formControlName="isActive">
+              <label nz-radio-button [nzValue]="true">Active</label>
+              <label nz-radio-button [nzValue]="false">Inactive</label>
+            </nz-radio-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+
+    <!-- DESCRIPTION -->
+    <nz-form-item>
+      <nz-form-label>Description</nz-form-label>
+      <nz-form-control>
+        <textarea
+          nz-input
+          rows="3"
+          formControlName="description"
+          placeholder="Optional description"
+        ></textarea>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-divider></nz-divider>
+
+    <!-- EXISTING IMAGES -->
+    <h4 class="section-title mb-2">Existing Images</h4>
+
+    <div class="image-grid" *ngIf="existingImages.length; else noImages">
+      <div class="image-box" *ngFor="let img of existingImages; let i = index">
+        <img [src]="img" />
+        <button
+          type="button"
+          class="remove-btn"
+          title="Remove image"
+          (click)="removeExistingImage(i)"
+        >
+          ✕
+        </button>
+      </div>
+    </div>
+
+    <ng-template #noImages>
+      <p class="text-muted">No images available</p>
+    </ng-template>
+
+    <nz-divider></nz-divider>
+
+    <!-- ADD NEW IMAGES -->
+    <h4 class="section-title mb-2">Add New Images</h4>
+
+    <nz-form-item>
+      <nz-form-control>
+        <input
+          type="file"
+          multiple
+          accept="image/*"
+          (change)="onFilesChange($event)"
+        />
+        <small class="text-muted d-block mt-1">
+          You can select multiple images
+        </small>
+
+        <div class="text-danger mt-1" *ngIf="imageError">
+          {{ imageError }}
+        </div>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- NEW IMAGE PREVIEW -->
+    <div class="image-grid mt-3" *ngIf="newImagePreviews.length">
+      <div class="image-box" *ngFor="let img of newImagePreviews; let i = index">
+        <img [src]="img" />
+        <button
+          type="button"
+          class="remove-btn"
+          title="Remove image"
+          (click)="removeNewImage(i)"
+        >
+          ✕
+        </button>
+      </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="d-flex justify-content-end mt-4">
+      <button nz-button nzType="primary" [nzLoading]="isSubmitting">
+        Update Gallery
+      </button>
+    </div>
+
+  </form>
+</nz-card>

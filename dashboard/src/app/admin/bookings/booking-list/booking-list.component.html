@@ -1,0 +1,240 @@
+<nz-card>
+
+<nz-breadcrumb>
+  <nz-breadcrumb-item>
+    <a routerLink="/dashboard/home">
+      <i nz-icon nzType="home"></i>
+      Home
+    </a>
+  </nz-breadcrumb-item>
+  <nz-breadcrumb-item>Workshop Bookings</nz-breadcrumb-item>
+</nz-breadcrumb>
+
+<div class="row m-b-30">
+
+<div class="col-lg-12">
+<div class="d-md-flex">
+
+<!-- Search -->
+
+<div class="m-b-10 m-r-20">
+
+<nz-form-item>
+<nz-form-label>Search</nz-form-label>
+
+<nz-input-group [nzPrefix]="searchIcon">
+
+<input
+nz-input
+placeholder="Booking Number / Customer"
+[(ngModel)]="searchInput"
+(ngModelChange)="search()"
+/>
+
+</nz-input-group>
+
+<ng-template #searchIcon>
+<i nz-icon nzType="search"></i>
+</ng-template>
+
+</nz-form-item>
+
+</div>
+
+<!-- Booking Status -->
+
+<div class="m-b-10 m-r-20">
+
+<nz-form-item>
+<nz-form-label>Status</nz-form-label>
+
+<nz-select
+[(ngModel)]="bookingStatus"
+(ngModelChange)="bookingStatusChange($event)"
+style="width:200px"
+>
+
+<nz-option nzLabel="All" nzValue="All"></nz-option>
+<nz-option nzLabel="Pending" nzValue="pending"></nz-option>
+<nz-option nzLabel="Confirmed" nzValue="confirmed"></nz-option>
+<nz-option nzLabel="Cancelled" nzValue="cancelled"></nz-option>
+<nz-option nzLabel="Completed" nzValue="completed"></nz-option>
+
+</nz-select>
+
+</nz-form-item>
+
+</div>
+
+<!-- Payment Status -->
+
+<div class="m-b-10 m-r-20">
+
+<nz-form-item>
+<nz-form-label>Payment</nz-form-label>
+
+<nz-select
+[(ngModel)]="paymentStatus"
+(ngModelChange)="paymentStatusChange($event)"
+style="width:200px"
+>
+
+<nz-option nzLabel="All" nzValue="All"></nz-option>
+<nz-option nzLabel="Pending" nzValue="pending"></nz-option>
+<nz-option nzLabel="Paid" nzValue="paid"></nz-option>
+<nz-option nzLabel="Failed" nzValue="failed"></nz-option>
+<nz-option nzLabel="Refunded" nzValue="refunded"></nz-option>
+
+</nz-select>
+
+</nz-form-item>
+
+</div>
+
+<!-- Date Filter -->
+
+<div class="m-b-10 m-r-20">
+
+<nz-form-item>
+<nz-form-label>Date</nz-form-label>
+
+<nz-range-picker
+[(ngModel)]="dateRange"
+(nzOnChange)="onDateRangeChange()"
+[nzFormat]="'dd-MM-yyyy'"
+></nz-range-picker>
+
+</nz-form-item>
+
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- Booking Table -->
+
+<nz-table
+[nzData]="bookingList"
+[nzBordered]="true"
+[nzLoading]="loading"
+[nzShowPagination]="false"
+>
+
+<thead>
+
+<tr>
+
+<th>#</th>
+<th>Booking Number</th>
+<th>Customer</th>
+<th>Booking Date</th>
+<th>Total People</th>
+<th>Grand Total</th>
+<th>Payment</th>
+<th>Status</th>
+<th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr *ngFor="let item of bookingList; let i = index">
+
+<td>{{ (pageIndex - 1) * pageSize + (i + 1) }}</td>
+
+<td>{{ item.bookingNumber }}</td>
+<td>
+  <div>
+    <strong>{{ item.customer.firstName }} {{ item.customer.lastName }}</strong>
+  </div>
+
+  <div style="font-size:12px; color:#555;">
+    <i nz-icon nzType="mail" nzTheme="outline"></i>
+    {{ item.customer.email }}
+  </div>
+
+  <div style="font-size:12px; color:#555;">
+    <i nz-icon nzType="phone" nzTheme="outline"></i>
+    {{ item.customer.phone }}
+  </div>
+</td>
+
+<td>{{ item.bookingDate | date:'dd-MM-yyyy' }}</td>
+
+<td>{{ item.totalPeople }}</td>
+
+<td>{{ item.grandTotal }} {{ item.currency }}</td>
+
+<td>
+
+<nz-tag
+[nzColor]="
+item.paymentStatus === 'paid'
+? 'green'
+: item.paymentStatus === 'failed'
+? 'red'
+: 'orange'
+"
+>
+
+{{ item.paymentStatus | titlecase }}
+
+</nz-tag>
+
+</td>
+
+<td>
+
+<nz-tag
+[nzColor]="
+item.bookingStatus === 'confirmed'
+? 'green'
+: item.bookingStatus === 'cancelled'
+? 'red'
+: 'blue'
+"
+>
+
+{{ item.bookingStatus | titlecase }}
+
+</nz-tag>
+
+</td>
+
+<td>
+
+<a
+nz-button
+nzType="default"
+nzShape="circle"
+nz-tooltip
+nzTooltipTitle="View"
+[routerLink]="['/admin/booking-detail', item._id]"
+>
+
+<i nz-icon nzType="eye"></i>
+
+</a>
+
+</td>
+
+</tr>
+
+</tbody>
+
+</nz-table>
+
+<!-- Pagination -->
+
+<nz-pagination
+[(nzPageIndex)]="pageIndex"
+[nzPageSize]="pageSize"
+[nzTotal]="total"
+(nzPageIndexChange)="onPageChange($event)"
+>
+</nz-pagination>
+
+</nz-card>

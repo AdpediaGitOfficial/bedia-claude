@@ -1,0 +1,129 @@
+<nz-card>
+  <!-- Breadcrumb -->
+  <nz-breadcrumb class="mb-3">
+    <nz-breadcrumb-item>
+      <a routerLink="/dashboard/home">
+        <i nz-icon nzType="home"></i>
+        Home
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>Galleries</nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <!-- Header -->
+  <div class="row mb-3">
+    <div class="col-8">
+      <h1 class="page-heading">Galleries</h1>
+    </div>
+    <div class="col-4 text-end">
+      <a nz-button nzType="primary" routerLink="/admin/gallery-add">
+        <i nz-icon nzType="plus-circle"></i>
+        Add Gallery
+      </a>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <nz-table
+    [nzData]="displayData"
+    [nzBordered]="true"
+    [nzShowPagination]="false"
+  >
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Gallery</th>
+        <th>Images</th>
+        <th>Status</th>
+        <th width="160">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let item of displayData; let i = index">
+        <!-- SI -->
+        <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
+
+        <!-- Gallery Info -->
+        <td>
+          <div class="d-flex align-items-center">
+            <nz-avatar
+              nzShape="square"
+              [nzSize]="60"
+              [nzSrc]="getThumbnail(item)"
+              nzIcon="picture"
+            ></nz-avatar>
+
+            <div class="ms-2">
+              <div class="fw-semibold">{{ item.title }}</div>
+              <small class="text-muted">
+                {{ item.description || 'No description' }}
+              </small>
+            </div>
+          </div>
+        </td>
+
+        <!-- Image Count -->
+        <td>
+          <nz-tag nzColor="blue">
+            {{ item.images?.length || 0 }} Images
+          </nz-tag>
+        </td>
+
+        <!-- Status -->
+        <td>
+          <nz-tag [nzColor]="item.isActive ? 'green' : 'red'">
+            {{ item.isActive ? 'Active' : 'Inactive' }}
+          </nz-tag>
+        </td>
+
+        <!-- Actions -->
+        <td>
+          <a
+            nz-button
+            nzType="default"
+            nzShape="circle"
+            nz-tooltip
+            nzTooltipTitle="View"
+            [routerLink]="['/admin/gallery-detail', item._id]"
+          >
+            <i nz-icon nzType="eye"></i>
+          </a>
+
+          <a
+            nz-button
+            nzType="default"
+            nzShape="circle"
+            nz-tooltip
+            nzTooltipTitle="Edit"
+            class="mx-1"
+            [routerLink]="['/admin/gallery-edit', item._id]"
+          >
+            <i nz-icon nzType="edit"></i>
+          </a>
+
+          <button
+            nz-button
+            nzType="default"
+            nzShape="circle"
+            nz-tooltip
+            nzTooltipTitle="Delete"
+            (click)="deleteItem(item._id)"
+          >
+            <i nz-icon nzType="delete"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+
+  <!-- Pagination -->
+  <div class="pagination-container mt-3">
+    <nz-pagination
+      [(nzPageIndex)]="pageIndex"
+      [nzPageSize]="pageSize"
+      [nzTotal]="total"
+      (nzPageIndexChange)="onPageChange($event)"
+    ></nz-pagination>
+  </div>
+</nz-card>

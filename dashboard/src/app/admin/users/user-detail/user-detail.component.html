@@ -1,0 +1,64 @@
+<nz-card>
+    <nz-breadcrumb class="mb-4">
+      <nz-breadcrumb-item>
+        <a [routerLink]="'/dashboard/home'">
+          <i nz-icon nzType="home" theme="outline"></i>
+          <span>Home</span>
+        </a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a [routerLink]="'/admin/users'">
+          <span>Users</span>
+        </a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>User Details</nz-breadcrumb-item>
+    </nz-breadcrumb>
+   
+    <nz-card nzTitle="User Details" class="shadow-sm p-3 rounded-card">
+        <div class="row align-items-center">
+          <!-- Avatar Section -->
+          <!-- <div class="col-md-4 text-center">
+            <nz-avatar class="shadow-sm m-v-15" [nzSize]="150" [nzSrc]="imagePreviewUrl"></nz-avatar>
+          </div> -->
+      
+          <!-- User Details Section -->
+          <div class="col-md-8">
+           <h2 class="m-b-5 font-weight-bold">
+  <i nz-icon nzType="user" nzTheme="outline" class="mr-2 text-primary"></i>
+  {{ displayDetails?.fullName }}
+</h2>
+
+<p class="text-dark m-b-20">
+  <i nz-icon nzType="phone" nzTheme="outline" class="mr-2 text-success"></i>
+  {{ displayDetails?.mobileNumber }}
+</p>
+
+<p class="text-dark m-b-20">
+  <i nz-icon nzType="mail" nzTheme="outline" class="mr-2 text-warning"></i>
+  {{ displayDetails?.email }}
+</p>
+
+<p class="text-dark m-b-20">
+  <i nz-icon nzType="idcard" nzTheme="outline" class="mr-2 text-info"></i>
+  Role: {{ displayDetails?.role }}
+</p>
+
+          </div>
+        </div>
+      
+    <div class="text-end m-t-20">
+      <button
+        nz-button
+        nzType="primary"
+        [routerLink]="'/admin/users'"
+        title="Back to List"
+      >
+        Back
+      </button>
+    </div>
+  </nz-card>
+  
+
+
+
+

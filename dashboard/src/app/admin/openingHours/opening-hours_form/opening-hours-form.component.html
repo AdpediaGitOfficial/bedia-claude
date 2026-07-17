@@ -1,0 +1,136 @@
+<nz-card>
+  <!-- Breadcrumb -->
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>
+      <a routerLink="/dashboard/home">
+        <i nz-icon nzType="home"></i>
+        Home
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <a routerLink="/admin/opening-hours">Opening Hours</a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      {{ isEditMode ? 'Edit Opening Hours' : 'Add Opening Hours' }}
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <!-- Heading -->
+  <div class="row m-b-30">
+    <div class="col-12">
+      <h1 class="page-heading">
+        {{ isEditMode ? 'Edit Opening Hours' : 'Add Opening Hours' }}
+      </h1>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <form
+    nz-form
+    nzLayout="vertical"
+    [formGroup]="form"
+    (ngSubmit)="submitForm()"
+  >
+    <div class="row">
+
+      <!-- Title -->
+      <div class="col-md-6 m-b-10">
+        <nz-form-item>
+          <nz-form-label>Title</nz-form-label>
+          <nz-form-control>
+            <input nz-input formControlName="title" placeholder="Opening Hours" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <!-- Days -->
+      <!-- <div class="col-md-6 m-b-10">
+        <nz-form-item>
+          <nz-form-label nzRequired>Days</nz-form-label>
+          <nz-form-control nzErrorTip="Days are required">
+            <input
+              nz-input
+              formControlName="days"
+              placeholder="e.g. Tuesday - Sunday"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div> -->
+
+      <!-- Start Day -->
+<div class="col-md-3 m-b-10">
+  <nz-form-item>
+    <nz-form-label nzRequired>Start Day</nz-form-label>
+    <nz-form-control nzErrorTip="Required">
+      <nz-select formControlName="startDay" nzPlaceHolder="Select start day">
+        <nz-option *ngFor="let day of daysList" [nzValue]="day" [nzLabel]="day"></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+</div>
+
+<!-- End Day -->
+<div class="col-md-3 m-b-10">
+  <nz-form-item>
+    <nz-form-label nzRequired>End Day</nz-form-label>
+    <nz-form-control nzErrorTip="Required">
+      <nz-select formControlName="endDay" nzPlaceHolder="Select end day">
+        <nz-option *ngFor="let day of daysList" [nzValue]="day" [nzLabel]="day"></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+</div>
+     <!-- Open Time -->
+      <div class="col-md-3 m-b-10">
+        <nz-form-item>
+          <nz-form-label nzRequired>Open Time</nz-form-label>
+          <nz-form-control nzErrorTip="Required">
+            <nz-time-picker
+              formControlName="openTime"
+              nzFormat="hh:mm a"
+              nzUse12Hours
+              nzPlaceHolder="Select open time"
+              style="width: 100%;"
+            ></nz-time-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <!-- Close Time -->
+      <div class="col-md-3 m-b-10">
+        <nz-form-item>
+          <nz-form-label nzRequired>Close Time</nz-form-label>
+          <nz-form-control nzErrorTip="Required">
+            <nz-time-picker
+              formControlName="closeTime"
+              nzFormat="hh:mm a"
+              nzUse12Hours
+              nzPlaceHolder="Select close time"
+              style="width: 100%;"
+            ></nz-time-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <!-- Status -->
+      <div class="col-md-4 m-b-10">
+        <nz-form-item>
+          <nz-form-label>Status</nz-form-label>
+          <nz-form-control>
+            <nz-radio-group formControlName="isActive">
+              <label nz-radio-button [nzValue]="true">Active</label>
+              <label nz-radio-button [nzValue]="false">Inactive</label>
+            </nz-radio-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+    </div>
+
+    <!-- Submit -->
+    <div class="d-flex justify-content-end mt-4">
+      <button nz-button nzType="primary" [nzLoading]="isSubmitting">
+        {{ isEditMode ? 'Update' : 'Submit' }}
+      </button>
+    </div>
+  </form>
+</nz-card>

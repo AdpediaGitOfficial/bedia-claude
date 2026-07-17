@@ -1,0 +1,48 @@
+<nz-table [nzData]="orderList" [nzBordered]="true">
+
+<thead>
+<tr>
+
+<th>#</th>
+<th>Order Number</th>
+<th>Items</th>
+<th>Grand Total</th>
+<th>Payment Status</th>
+<th>Payment Method</th>
+<th>Date</th>
+
+</tr>
+</thead>
+
+<tbody>
+
+<tr *ngFor="let item of orderList; let i=index">
+
+<td>{{ (pageIndex - 1) * pageSize + (i + 1) }}</td>
+
+<td>{{ item.orderNumber }}</td>
+
+<td>{{ item.items.length }}</td>
+
+<td>{{ item.grandTotal }} {{ item.currency }}</td>
+
+<td>
+
+<nz-tag
+[nzColor]="item.paymentStatus=='paid'?'green':'orange'"
+>
+{{ item.paymentStatus }}
+
+</nz-tag>
+
+</td>
+
+<td>{{ item.paymentMethod }}</td>
+
+<td>{{ item.createdAt | date:'dd-MM-yyyy' }}</td>
+
+</tr>
+
+</tbody>
+
+</nz-table>

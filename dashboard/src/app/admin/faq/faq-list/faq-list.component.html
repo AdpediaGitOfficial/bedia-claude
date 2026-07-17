@@ -1,0 +1,118 @@
+<nz-card>
+  <!-- Breadcrumb -->
+  <nz-breadcrumb class="mb-3">
+    <nz-breadcrumb-item>
+      <a routerLink="/dashboard/home">
+        <i nz-icon nzType="home"></i>
+        Home
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>FAQs</nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <!-- Header -->
+  <div class="row mb-3">
+    <div class="col-8">
+      <h1 class="page-heading">FAQs</h1>
+    </div>
+    <div class="col-4 text-end">
+      <a nz-button nzType="primary" routerLink="/admin/faq-add">
+        <i nz-icon nzType="plus-circle"></i>
+        Add FAQ
+      </a>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <nz-table
+    [nzData]="displayData"
+    [nzBordered]="true"
+    [nzShowPagination]="false"
+  >
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Question</th>
+        <th>Category</th>
+        <th>Status</th>
+        <th width="160">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let item of displayData; let i = index">
+        <!-- SI -->
+        <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
+
+        <!-- Question -->
+        <td>
+          <div class="fw-semibold">
+            {{ item.question }}
+          </div>
+          <small class="text-muted">
+            {{ item.answer | slice:0:80 }}{{ item.answer?.length > 80 ? '...' : '' }}
+          </small>
+        </td>
+
+        <!-- Category -->
+        <td>
+          {{ item.category || 'N/A' }}
+        </td>
+
+        <!-- Status -->
+        <td>
+          <nz-tag [nzColor]="item.isActive ? 'green' : 'red'">
+            {{ item.isActive ? 'Active' : 'Inactive' }}
+          </nz-tag>
+        </td>
+
+        <!-- Actions -->
+        <td>
+          <a
+            nz-button
+            nzType="default"
+            nzShape="circle"
+            nz-tooltip
+            nzTooltipTitle="View"
+            [routerLink]="['/admin/faq-detail', item._id]"
+          >
+            <i nz-icon nzType="eye"></i>
+          </a>
+
+          <a
+            nz-button
+            nzType="default"
+            nzShape="circle"
+            nz-tooltip
+            nzTooltipTitle="Edit"
+            class="mx-1"
+            [routerLink]="['/admin/faq-edit', item._id]"
+          >
+            <i nz-icon nzType="edit"></i>
+          </a>
+
+          <button
+            nz-button
+            nzType="default"
+            nzShape="circle"
+            nz-tooltip
+            nzTooltipTitle="Delete"
+            (click)="deleteItem(item._id)"
+          >
+            <i nz-icon nzType="delete"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+
+  <!-- Pagination -->
+  <div class="pagination-container mt-3">
+    <nz-pagination
+      [(nzPageIndex)]="pageIndex"
+      [nzPageSize]="pageSize"
+      [nzTotal]="total"
+      (nzPageIndexChange)="onPageChange($event)"
+    ></nz-pagination>
+  </div>
+</nz-card>

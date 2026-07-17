@@ -1,0 +1,69 @@
+<nz-card>
+  <!-- Breadcrumb -->
+  <nz-breadcrumb class="mb-4">
+    <nz-breadcrumb-item>
+      <a routerLink="/dashboard/home">
+        <i nz-icon nzType="home"></i>
+        Home
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <a routerLink="/admin/gallery">Gallery</a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>Gallery Details</nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <!-- Details Card -->
+  <nz-card nzTitle="Gallery Details" class="shadow-sm rounded-card">
+    <table class="product-info-table">
+      <tbody>
+        <tr>
+          <td>Gallery Name</td>
+          <td class="fw-semibold">{{ displayDetails?.title }}</td>
+        </tr>
+
+        <tr>
+          <td>Description</td>
+          <td>{{ displayDetails?.description || 'N/A' }}</td>
+        </tr>
+
+        <tr>
+          <td>Status</td>
+          <td>
+            <nz-tag [nzColor]="displayDetails?.isActive ? 'green' : 'red'">
+              {{ displayDetails?.isActive ? 'Active' : 'Inactive' }}
+            </nz-tag>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Images</td>
+          <td>
+            <ng-container *ngIf="imageUrls.length; else noImages">
+              <div class="gallery-grid">
+                <nz-image-group>
+                  <nz-image
+                    *ngFor="let img of imageUrls"
+                    [nzSrc]="img"
+                    nzWidth="120px"
+                  ></nz-image>
+                </nz-image-group>
+              </div>
+            </ng-container>
+
+            <ng-template #noImages>
+              <span class="text-muted">No images available</span>
+            </ng-template>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </nz-card>
+
+  <!-- Back Button -->
+  <div class="text-end mt-4">
+    <button nz-button nzType="default" routerLink="/admin/gallery">
+      Back
+    </button>
+  </div>
+</nz-card>

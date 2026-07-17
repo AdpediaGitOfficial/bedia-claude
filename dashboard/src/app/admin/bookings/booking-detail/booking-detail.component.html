@@ -1,0 +1,413 @@
+<nz-card>
+
+<!-- Breadcrumb -->
+<nz-breadcrumb class="mb-4">
+  <nz-breadcrumb-item>
+    <a [routerLink]="'/dashboard/home'">
+      <i nz-icon nzType="home"></i> Home
+    </a>
+  </nz-breadcrumb-item>
+
+  <nz-breadcrumb-item>
+    <a [routerLink]="'/admin/bookings'">
+      Workshop Bookings
+    </a>
+  </nz-breadcrumb-item>
+
+  <nz-breadcrumb-item>
+    Booking Details
+  </nz-breadcrumb-item>
+</nz-breadcrumb>
+
+
+<!-- ====================== -->
+<!-- SUMMARY CARDS -->
+<!-- ====================== -->
+
+<div nz-row [nzGutter]="16" class="mb-4">
+
+  <div nz-col nzXs="24" nzMd="6">
+    <nz-card class="stat-card">
+      <div class="stat-title">Workshop</div>
+      <div class="stat-value">
+        <i nz-icon nzType="appstore"></i>
+        {{ booking?.workshopTitle }}
+      </div>
+    </nz-card>
+  </div>
+
+  <div nz-col nzXs="24" nzMd="6">
+    <nz-card class="stat-card">
+      <div class="stat-title">Slot Time</div>
+      <div class="stat-value">
+        <i nz-icon nzType="clock-circle"></i>
+        {{ booking?.slotStartTime }} - {{ booking?.slotEndTime }}
+      </div>
+    </nz-card>
+  </div>
+
+  <div nz-col nzXs="24" nzMd="6">
+    <nz-card class="stat-card">
+      <div class="stat-title">Total People</div>
+      <div class="stat-value">
+        <i nz-icon nzType="team"></i>
+        {{ booking?.totalPeople }}
+      </div>
+    </nz-card>
+  </div>
+
+  <div nz-col nzXs="24" nzMd="6">
+    <nz-card class="stat-card highlight-card">
+      <div class="stat-title">Grand Total</div>
+      <div class="stat-value">
+        {{ booking?.grandTotal }} {{ booking?.currency }}
+      </div>
+    </nz-card>
+  </div>
+
+</div>
+
+
+<!-- ====================== -->
+<!-- BOOKING INFORMATION -->
+<!-- ====================== -->
+
+<nz-card [nzTitle]="bookingHeader" class="mb-4">
+
+<table class="info-table">
+
+<tr>
+<td>Booking Number</td>
+<td>{{ booking?.bookingNumber }}</td>
+</tr>
+
+<tr>
+<td>Booked On</td>
+<td>{{ booking?.createdAt | date:'mediumDate' }}</td>
+</tr>
+
+<tr>
+<td>Booking Date</td>
+<td>{{ booking?.bookingDate | date:'mediumDate' }}</td>
+</tr>
+
+<tr>
+<td>Booking Status</td>
+<td>
+<nz-tag
+[nzColor]="
+booking?.bookingStatus === 'confirmed'
+? 'green'
+: booking?.bookingStatus === 'pending'
+? 'orange'
+: 'red'
+">
+{{ booking?.bookingStatus | titlecase }}
+</nz-tag>
+</td>
+</tr>
+
+<tr>
+<td>Payment Status</td>
+<td>
+<nz-tag
+[nzColor]="
+booking?.paymentStatus === 'paid'
+? 'green'
+: booking?.paymentStatus === 'pending'
+? 'orange'
+: 'red'
+">
+{{ booking?.paymentStatus | titlecase }}
+</nz-tag>
+</td>
+</tr>
+
+<tr *ngIf="booking?.bookingType">
+<td>Booking Type</td>
+<td>
+<nz-tag
+[nzColor]="
+booking?.bookingType === 'gift'
+? 'magenta'
+: booking?.bookingType === 'pottery'
+? 'geekblue'
+: 'blue'
+">
+{{ booking?.bookingType | titlecase }}
+</nz-tag>
+</td>
+</tr>
+
+<tr *ngIf="booking?.makingType">
+<td>Making Type</td>
+<td>{{ booking?.makingType | titlecase }}</td>
+</tr>
+
+<tr *ngIf="booking?.bookingType === 'gift' && booking?.giftStatus">
+<td>Gift Status</td>
+<td>
+<nz-tag
+[nzColor]="
+booking?.giftStatus === 'redeemed'
+? 'green'
+: booking?.giftStatus === 'completed'
+? 'blue'
+: 'orange'
+">
+{{ booking?.giftStatus | titlecase }}
+</nz-tag>
+</td>
+</tr>
+
+<tr *ngIf="booking?.giftValidity">
+<td>Gift Valid Till</td>
+<td>{{ booking?.giftValidity | date:'mediumDate' }}</td>
+</tr>
+
+</table>
+
+</nz-card>
+
+
+<!-- ====================== -->
+<!-- CUSTOMER + PAYMENT -->
+<!-- ====================== -->
+
+<div nz-row [nzGutter]="16" class="mb-4">
+
+<div nz-col nzXs="24" nzMd="12">
+
+<nz-card [nzTitle]="customerHeader">
+
+<table class="info-table">
+
+<tr>
+<td>Name</td>
+<td>
+{{ booking?.customer?.firstName }}
+{{ booking?.customer?.lastName }}
+</td>
+</tr>
+
+<tr>
+<td>Email</td>
+<td>
+<i nz-icon nzType="mail"></i>
+{{ booking?.customer?.email }}
+</td>
+</tr>
+
+<tr>
+<td>Phone</td>
+<td>
+<i nz-icon nzType="phone"></i>
+{{ booking?.customer?.phone }}
+</td>
+</tr>
+
+<tr>
+<td>Address</td>
+<td>
+{{ booking?.customer?.address }},
+{{ booking?.customer?.city }},
+{{ booking?.customer?.country }}
+</td>
+</tr>
+
+<tr *ngIf="booking?.customer?.notes">
+<td>Notes</td>
+<td>{{ booking?.customer?.notes }}</td>
+</tr>
+
+</table>
+
+</nz-card>
+
+</div>
+
+
+<div nz-col nzXs="24" nzMd="12">
+
+<nz-card [nzTitle]="paymentHeader">
+
+<table class="info-table">
+
+<tr>
+<td>Total Amount</td>
+<td>{{ booking?.totalAmount }} {{ booking?.currency }}</td>
+</tr>
+
+<tr>
+<td>Tax ({{ booking?.taxPercent }}%)</td>
+<td>{{ booking?.taxAmount }}</td>
+</tr>
+
+<tr class="total-row">
+<td>Grand Total</td>
+<td>{{ booking?.grandTotal }} {{ booking?.currency }}</td>
+</tr>
+
+</table>
+
+</nz-card>
+
+</div>
+
+</div>
+
+
+<!-- ====================== -->
+<!-- GIFT DETAILS -->
+<!-- ====================== -->
+
+<nz-card *ngIf="hasGiftDetails" [nzTitle]="giftHeader" class="mb-4">
+
+<table class="info-table">
+
+<tr *ngIf="booking?.giftDetails?.recipientName">
+<td>Recipient Name</td>
+<td>{{ booking?.giftDetails?.recipientName }}</td>
+</tr>
+
+<tr *ngIf="booking?.giftDetails?.giftEmail">
+<td>Recipient Email</td>
+<td>
+<i nz-icon nzType="mail"></i>
+{{ booking?.giftDetails?.giftEmail }}
+</td>
+</tr>
+
+<tr *ngIf="booking?.giftDetails?.giftPhone">
+<td>Recipient Phone</td>
+<td>
+<i nz-icon nzType="phone"></i>
+{{ booking?.giftDetails?.giftPhone }}
+</td>
+</tr>
+
+<tr *ngIf="booking?.giftDetails?.giftFor">
+<td>Gift For</td>
+<td>{{ booking?.giftDetails?.giftFor }}</td>
+</tr>
+
+<tr *ngIf="booking?.giftDetails?.occasion">
+<td>Occasion</td>
+<td>{{ booking?.giftDetails?.occasion }}</td>
+</tr>
+
+<tr *ngIf="booking?.giftDetails?.personalMessage">
+<td>Personal Message</td>
+<td>{{ booking?.giftDetails?.personalMessage }}</td>
+</tr>
+
+<tr *ngIf="booking?.giftDetails?.voucherCode">
+<td>Voucher Code</td>
+<td>{{ booking?.giftDetails?.voucherCode }}</td>
+</tr>
+
+<tr *ngIf="booking?.giftDetails?.sentAt">
+<td>Voucher Sent On</td>
+<td>{{ booking?.giftDetails?.sentAt | date:'medium' }}</td>
+</tr>
+
+</table>
+
+</nz-card>
+
+
+<!-- ====================== -->
+<!-- WORKSHOP ITEMS -->
+<!-- ====================== -->
+
+<nz-card [nzTitle]="itemsHeader">
+<nz-table
+[nzData]="booking?.items"
+[nzBordered]="true"
+[nzSize]="'middle'"
+[nzShowPagination]="false">
+
+<thead>
+<tr>
+<th>Item</th>
+<th>Price</th>
+<th>People</th>
+<th>Subtotal</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr *ngFor="let item of booking?.items">
+
+<td>{{ item.optionTitle }}</td>
+
+<td>{{ item.price }} {{ booking?.currency }}</td>
+
+<td>
+{{ item.people }}
+<span *ngIf="item.adult || item.child" class="text-muted">
+({{ item.adult || 0 }} Adult, {{ item.child || 0 }} Child)
+</span>
+</td>
+
+<td>{{ item.subtotal }} {{ booking?.currency }}</td>
+
+</tr>
+
+</tbody>
+
+</nz-table>
+
+</nz-card>
+
+
+<!-- BACK BUTTON -->
+
+<div class="text-end mt-4">
+<button nz-button nzType="primary" [routerLink]="'/admin/bookings'">
+Back
+</button>
+</div>
+
+</nz-card>
+
+
+<!-- ====================== -->
+<!-- HEADER TEMPLATES -->
+<!-- ====================== -->
+
+<ng-template #bookingHeader>
+<div class="card-header-light header-booking">
+<i nz-icon nzType="profile"></i>
+Booking Information
+</div>
+</ng-template>
+
+<ng-template #customerHeader>
+<div class="card-header-light header-customer">
+<i nz-icon nzType="user"></i>
+Customer Details
+</div>
+</ng-template>
+
+<ng-template #paymentHeader>
+<div class="card-header-light header-payment">
+<i nz-icon nzType="wallet"></i>
+Payment Summary
+</div>
+</ng-template>
+
+<ng-template #itemsHeader>
+<div class="card-header-light header-items">
+<i nz-icon nzType="appstore"></i>
+Workshop Items
+</div>
+</ng-template>
+
+<ng-template #giftHeader>
+<div class="card-header-light header-customer">
+<i nz-icon nzType="gift"></i>
+Gift Details
+</div>
+</ng-template>

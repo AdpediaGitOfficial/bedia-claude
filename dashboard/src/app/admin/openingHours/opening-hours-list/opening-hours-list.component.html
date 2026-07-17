@@ -1,0 +1,80 @@
+<nz-card>
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center m-b-20">
+    <h2>Opening Hours</h2>
+
+    <a nz-button nzType="primary" routerLink="/admin/openingHours-add">
+      <i nz-icon nzType="plus"></i>
+      Add Opening Hours
+    </a>
+  </div>
+
+  <!-- Table -->
+  <nz-table [nzData]="displayData" [nzBordered]="true" [nzShowPagination]="false">
+    <thead>
+      <tr>
+        <th>SI.No.</th>
+        <th>Title</th>
+        <th>Days</th>
+        <th>Timing</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let item of displayData; let i = index">
+
+        <!-- SI NO -->
+        <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
+
+        <!-- TITLE -->
+        <td>{{ item.title }}</td>
+
+        <!-- DAYS -->
+        <td>{{ item.days }}</td>
+
+        <!-- TIME -->
+        <!-- <td>
+          {{ item.openTime | date:'hh:mm a' }} - {{ item.closeTime | date:'hh:mm a' }}
+        </td> -->
+        <td>
+  {{ item.openTime }} - {{ item.closeTime }}
+</td>
+        <!-- STATUS -->
+        <td>
+          <nz-badge [nzStatus]="item.isActive ? 'success' : 'error'"></nz-badge>
+          <span class="m-l-5">
+            {{ item.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </td>
+
+        <!-- ACTIONS -->
+        <td>
+          <a nz-button nzShape="circle" nz-tooltip nzTooltipTitle="Edit"
+             [routerLink]="['/admin/openingHours-edit', item._id]">
+            <i nz-icon nzType="edit"></i>
+          </a>
+
+          <button nz-button nzShape="circle" nz-tooltip nzTooltipTitle="Delete"
+                  (click)="deleteItem(item._id)">
+            <i nz-icon nzType="delete"></i>
+          </button>
+        </td>
+
+      </tr>
+    </tbody>
+  </nz-table>
+
+  <!-- Pagination -->
+  <div class="pagination-wrapper">
+    <nz-pagination
+      [(nzPageIndex)]="pageIndex"
+      [nzPageSize]="pageSize"
+      [nzTotal]="total"
+      (nzPageIndexChange)="onPageChange($event)">
+    </nz-pagination>
+  </div>
+
+</nz-card>

@@ -1,0 +1,66 @@
+<nz-card>
+    <!-- Breadcrumb -->
+    <nz-breadcrumb>
+      <nz-breadcrumb-item>
+        <a [routerLink]="'/dashboard/home'">
+          <i nz-icon nzType="home" theme="outline"></i>
+          <span>Home</span>
+        </a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>Packages</nz-breadcrumb-item>
+    </nz-breadcrumb> 
+
+    <div class="row m-b-30 align-items-center">
+      <div class="col-lg-8 d-flex align-items-center">
+        <h1 class="page-heading ml-2 mb-0">Packages</h1>
+      </div>
+      <div class="col-lg-4 text-right">
+        <a nz-button nzType="primary" [routerLink]="'/admin/package-add'"> 
+          <i nz-icon nzType="plus-circle" theme="outline"></i>
+          <span>Add Package</span>
+        </a>
+      </div>
+    </div>
+
+    <nz-table #productsListTable [nzData]="displayData" [nzBordered]="true">
+      <thead>
+        <tr>
+          <th *ngFor="let column of orderColumn" [nzSortFn]="column.compare">
+            {{ column.title }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of displayData; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ item.packageName }}</td>
+          <td>{{ item.ageFrom }} to {{ item.ageTo }}</td>
+          <td>{{ item.description }}</td>
+          <td>
+            <nz-badge
+              *ngIf="item.isActive === true"
+              nzStatus="success"
+            ></nz-badge>
+            <nz-badge
+              *ngIf="item.isActive === false"
+              nzStatus="error"
+            ></nz-badge>
+            <span class="text-capitalize">{{ item.isActive ? 'Active' : 'Inactive' }}</span>
+          </td>
+          <td >           
+            <a class="m-r-5" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="View" [routerLink]="['/admin/package-detail', item._id]" >
+              <i nz-icon nzType="eye" theme="outline"></i>
+            </a>
+            <a class="m-r-5" nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Edit" [routerLink]="['/admin/package-edit', item._id]" >
+                <i nz-icon nzType="edit" theme="outline"></i>
+            </a>
+            <button nz-button nzType="default" nzShape="circle" nz-tooltip nzTooltipTitle="Delete" (click)="deleteItem('/api/package', item._id)">
+                <i nz-icon nzType="delete" theme="outline"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+    
+  </nz-card>
+  

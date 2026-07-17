@@ -1,0 +1,90 @@
+/* Page Wrapper Background */
+:host {
+  display: block;
+  background-color: #f0f2f5; 
+  padding: 24px;
+}
+
+/* Base Card Styling */
+nz-card {
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+/* Summary Stats Cards */
+.stat-card {
+  border-bottom: 3px solid #1890ff; /* Blue accent */
+  .stat-title {
+    color: #8c8c8c;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .stat-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: #262626;
+    i { color: #1890ff; margin-right: 8px; }
+  }
+}
+
+.highlight-card {
+  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+  border-bottom: none;
+  .stat-title { color: rgba(255, 255, 255, 0.8); }
+  .stat-value { color: #ffffff; }
+}
+
+/* Section Header Styling */
+.card-header-light {
+  font-weight: 700;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  i { margin-right: 10px; font-size: 18px; }
+}
+
+/* Section-specific accents */
+.header-booking { color: #1890ff; }
+.header-customer { color: #722ed1; }
+.header-payment { color: #52c41a; }
+.header-items { color: #fa8c16; }
+
+/* Table Enhancements */
+.info-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+
+  tr {
+    td:first-child {
+      width: 40%;
+      color: #8c8c8c;
+      font-weight: 500;
+      padding: 8px 0;
+    }
+    td:last-child {
+      font-weight: 600;
+      color: #262626;
+      text-align: right;
+    }
+  }
+}
+
+/* Payment Summary Row Highlighting */
+.total-row {
+  td {
+    padding-top: 15px !important;
+    border-top: 1px solid #f0f0f0;
+    font-size: 18px !important;
+    color: #1890ff !important;
+  }
+}
+
+/* Background Tints for Specific Cards */
+.customer-card-bg { background-color: #f9f0ff; } /* Light Purple */
+.payment-card-bg { background-color: #f6ffed; } /* Light Green */

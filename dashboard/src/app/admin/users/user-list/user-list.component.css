@@ -1,0 +1,21 @@
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.export-button {
+  flex: 1; 
+}
+
+.pagination-content {
+  display: flex;
+  justify-content: flex-end;
+  flex: 1;
+}
+
+.custom-search-input {
+  width: 100%;
+  max-width: 500px; 
+}

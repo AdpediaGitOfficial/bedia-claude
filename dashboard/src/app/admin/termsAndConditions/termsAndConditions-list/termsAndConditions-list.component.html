@@ -1,0 +1,123 @@
+<nz-card>
+  <!-- Breadcrumb -->
+  <nz-breadcrumb class="mb-3">
+    <nz-breadcrumb-item>
+      <a routerLink="/dashboard/home">
+        <i nz-icon nzType="home"></i>
+        Home
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>Terms & Conditions</nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <!-- Header -->
+  <div class="row mb-3">
+    <div class="col-8">
+      <h1 class="page-heading">Terms & Conditions</h1>
+    </div>
+    <div class="col-4 text-end">
+      <a
+        nz-button
+        nzType="primary"
+        routerLink="/admin/termsAndConditions-add"
+      >
+        <i nz-icon nzType="plus-circle"></i>
+        Add Terms
+      </a>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <nz-table
+    [nzData]="displayData"
+    [nzBordered]="true"
+    [nzShowPagination]="false"
+  >
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Title</th>
+        <th>Content</th>
+        <th>Status</th>
+        <th width="160">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let item of displayData; let i = index">
+        <!-- SI -->
+        <td>{{ (pageIndex - 1) * pageSize + i + 1 }}</td>
+
+        <!-- Title -->
+        <td>
+          <div class="fw-semibold">{{ item.title }}</div>
+        </td>
+
+        <!-- Content preview -->
+        <td>
+          <small class="text-muted">
+            {{ item.content | slice: 0: 80
+            }}{{ item.content?.length > 80 ? '...' : '' }}
+          </small>
+        </td>
+
+        <!-- Status -->
+        <td>
+          <nz-tag [nzColor]="item.isActive ? 'green' : 'red'">
+            {{ item.isActive ? 'Active' : 'Inactive' }}
+          </nz-tag>
+        </td>
+
+        <!-- Actions -->
+        <td>
+          <!-- View -->
+          <a
+            nz-button
+            nzType="default"
+            nzShape="circle"
+            nz-tooltip
+            nzTooltipTitle="View"
+            [routerLink]="['/admin/termsAndConditions-detail', item._id]"
+          >
+            <i nz-icon nzType="eye"></i>
+          </a>
+
+          <!-- Edit -->
+          <a
+            nz-button
+            nzType="default"
+            nzShape="circle"
+            nz-tooltip
+            nzTooltipTitle="Edit"
+            class="mx-1"
+            [routerLink]="['/admin/termsAndConditions-edit', item._id]"
+          >
+            <i nz-icon nzType="edit"></i>
+          </a>
+
+          <!-- Delete -->
+          <button
+            nz-button
+            nzType="default"
+            nzShape="circle"
+            nz-tooltip
+            nzTooltipTitle="Delete"
+            (click)="deleteItem(item._id)"
+          >
+            <i nz-icon nzType="delete"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+
+  <!-- Pagination -->
+  <div class="pagination-container mt-3">
+    <nz-pagination
+      [(nzPageIndex)]="pageIndex"
+      [nzPageSize]="pageSize"
+      [nzTotal]="total"
+      (nzPageIndexChange)="onPageChange($event)"
+    ></nz-pagination>
+  </div>
+</nz-card>

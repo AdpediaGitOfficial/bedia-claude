@@ -1,0 +1,115 @@
+<nz-card>
+  <!-- Breadcrumb -->
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>
+      <a routerLink="/dashboard/home">
+        <i nz-icon nzType="home"></i>
+        Home
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <a routerLink="/admin/galleries">Galleries</a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>Add Gallery</nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <!-- Heading -->
+  <div class="row m-b-30">
+    <div class="col-12">
+      <h1 class="page-heading">Add Gallery</h1>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <form
+    nz-form
+    nzLayout="vertical"
+    [formGroup]="submitDataForm"
+    (ngSubmit)="submitForm()"
+  >
+    <div class="row">
+      <!-- Title -->
+      <div class="col-md-4 m-b-10">
+        <nz-form-item>
+          <nz-form-label nzRequired>Gallery Name</nz-form-label>
+          <nz-form-control nzErrorTip="Gallery name is required">
+            <input
+              nz-input
+              formControlName="title"
+              placeholder="Gallery Name"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <!-- Description -->
+      <div class="col-md-4 m-b-10">
+        <nz-form-item>
+          <nz-form-label>Description</nz-form-label>
+          <nz-form-control>
+            <textarea
+              nz-input
+              rows="3"
+              formControlName="description"
+              placeholder="Optional description"
+            ></textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <!-- Status -->
+      <div class="col-md-4 m-b-10">
+        <nz-form-item>
+          <nz-form-label>Status</nz-form-label>
+          <nz-form-control>
+            <nz-radio-group formControlName="isActive">
+              <label nz-radio-button [nzValue]="true">Active</label>
+              <label nz-radio-button [nzValue]="false">Inactive</label>
+            </nz-radio-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+
+    <!-- Images -->
+    <nz-form-item>
+      <nz-form-label nzRequired>Gallery Images</nz-form-label>
+      <nz-form-control>
+        <input
+          type="file"
+          multiple
+          accept="image/*"
+          (change)="onFilesChange($event)"
+        />
+
+        <small class="text-muted d-block mt-1">
+          Upload at least one image (JPG, PNG)
+        </small>
+
+        <div *ngIf="imageError" class="text-danger mt-1">
+          {{ imageError }}
+        </div>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Image Preview -->
+    <div class="image-preview-grid" *ngIf="imagePreviewUrls.length">
+      <div
+        class="preview-box"
+        *ngFor="let img of imagePreviewUrls; let i = index"
+      >
+        <img [src]="img" />
+        <button type="button" class="remove-btn" (click)="removeImage(i)">
+          ✕
+        </button>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="d-flex justify-content-end mt-4">
+      <button nz-button nzType="primary" [nzLoading]="isSubmitting">
+        Submit
+      </button>
+    </div>
+  </form>
+</nz-card>

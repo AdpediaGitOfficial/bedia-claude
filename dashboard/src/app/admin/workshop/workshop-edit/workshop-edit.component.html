@@ -1,0 +1,200 @@
+<nz-card>
+
+  <!-- Breadcrumb -->
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>
+      <a routerLink="/dashboard/home">
+        <i nz-icon nzType="home"></i>
+        Home
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <a routerLink="/admin/workshops">Workshops</a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>Edit Workshop</nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <h1 class="page-heading m-b-20">Edit Workshop</h1>
+
+  <form nz-form nzLayout="vertical" [formGroup]="workshopForm" (ngSubmit)="submitForm()">
+
+    <!-- ================= BASIC ================= -->
+    <div nz-row [nzGutter]="16">
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label nzRequired>Workshop Title</nz-form-label>
+          <nz-form-control nzErrorTip="Title is required">
+            <input nz-input formControlName="title" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label nzRequired>Category</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="categoryId">
+              <nz-option
+                *ngFor="let cat of categories"
+                [nzLabel]="cat.title"
+                [nzValue]="cat._id">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+
+    <!-- ================= IMAGES ================= -->
+    <div nz-row [nzGutter]="16">
+      <div nz-col nzSpan="12">
+        <label>Banner Image</label>
+        <input type="file" accept="image/*" (change)="onBannerChange($event)" />
+
+        <img *ngIf="bannerPreview" [src]="bannerPreview" class="preview-image m-t-10" />
+      </div>
+
+      <div nz-col nzSpan="12">
+        <label>Workshop Images</label>
+        <input type="file" multiple accept="image/*" (change)="onImagesChange($event)" />
+
+        <div class="preview-wrapper m-t-10">
+          <img *ngFor="let img of imagePreviewUrls" [src]="img" class="preview-image" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= TEXT ================= -->
+    <nz-form-item>
+      <nz-form-label nzRequired>Short Description</nz-form-label>
+      <nz-form-control>
+        <textarea nz-input rows="2" formControlName="shortDescription"></textarea>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label nzRequired>Description</nz-form-label>
+      <nz-form-control>
+        <textarea nz-input rows="4" formControlName="description"></textarea>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Overview</nz-form-label>
+      <nz-form-control>
+        <textarea nz-input rows="3" formControlName="overview"></textarea>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- ================= SLOTS ================= -->
+    <nz-divider nzText="Time Slots"></nz-divider>
+
+    <div formArrayName="defaultSlots">
+      <div *ngFor="let slot of defaultSlots.controls; let i=index" [formGroupName]="i" class="slot-box">
+        <div nz-row [nzGutter]="16">
+          <div nz-col nzSpan="5">
+            <input nz-input formControlName="label" placeholder="Label">
+          </div>
+          <div nz-col nzSpan="5">
+            <nz-time-picker nzUse12Hours formControlName="startTime"></nz-time-picker>
+          </div>
+          <div nz-col nzSpan="5">
+            <nz-time-picker nzUse12Hours formControlName="endTime"></nz-time-picker>
+          </div>
+          <div nz-col nzSpan="4">
+            <input nz-input type="number" formControlName="capacity">
+          </div>
+          <div nz-col nzSpan="3">
+            <button nz-button nzDanger nzType="link" (click)="removeSlot(i)">Remove</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button nz-button nzType="dashed" (click)="addSlot()" type="button">+ Add Slot</button>
+
+    <!-- ================= OPTIONS ================= -->
+    <nz-divider nzText="Pricing Options"></nz-divider>
+
+    <div formArrayName="options">
+      <div *ngFor="let opt of options.controls; let i=index" [formGroupName]="i" class="slot-box">
+        <div nz-row [nzGutter]="16">
+          <div nz-col nzSpan="6"><input nz-input formControlName="title"></div>
+          <div nz-col nzSpan="4"><input nz-input type="number" formControlName="price"></div>
+          <div nz-col nzSpan="4"><input nz-input formControlName="currency"></div>
+          <div nz-col nzSpan="8"><input nz-input formControlName="priceDescription"></div>
+          <div nz-col nzSpan="2">
+            <button nz-button nzDanger nzType="link" (click)="removeOption(i)">Remove</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button nz-button nzType="dashed" (click)="addOption()" type="button">+ Add Option</button>
+
+    <!-- ================= DATES ================= -->
+    <!-- <nz-form-item>
+      <nz-form-label>Non-Availability Dates</nz-form-label>
+      <nz-form-control>
+        <nz-date-picker
+          nzMode="multiple"
+          nzFormat="yyyy-MM-dd"
+          [ngModel]="nonAvailabilityDates"
+          (ngModelChange)="onDatesChange($event)">
+        </nz-date-picker>
+
+        <nz-tag
+          *ngFor="let d of nonAvailabilityDates; let i=index"
+          nzClosable
+          (nzOnClose)="removeDate(i)">
+          {{ d | date:'dd MMM yyyy' }}
+        </nz-tag>
+      </nz-form-control>
+    </nz-form-item> -->
+
+    <!-- ================= DAYS ================= -->
+    <nz-divider nzText="Non-Availability Days"></nz-divider>
+    <div formArrayName="nonAvailabilityDays">
+      <label nz-checkbox *ngFor="let d of weekDays; let i=index" [formControlName]="i">
+        {{ d }}
+      </label>
+    </div>
+
+
+     <!-- ================= STATUS & HOMEPAGE ================= -->
+<div nz-row [nzGutter]="16">
+  <!-- Status -->
+  <div nz-col nzSpan="12">
+    <nz-form-item>
+      <nz-form-label>Status</nz-form-label>
+      <nz-form-control>
+        <nz-radio-group formControlName="isActive">
+          <label nz-radio-button [nzValue]="true">Active</label>
+          <label nz-radio-button [nzValue]="false">Inactive</label>
+        </nz-radio-group>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
+  <!-- Show on Homepage -->
+  <div nz-col nzSpan="12" *ngIf="showHomepageToggle">
+    <nz-form-item>
+      <nz-form-label>Show on Homepage</nz-form-label>
+      <nz-form-control>
+        <nz-radio-group formControlName="showOnHomepage">
+          <label nz-radio-button [nzValue]="true">Yes</label>
+          <label nz-radio-button [nzValue]="false">No</label>
+        </nz-radio-group>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
+</div>
+
+
+    <div class="text-right m-t-30">
+      <button nz-button nzType="primary">Update Workshop</button>
+    </div>
+
+  </form>
+</nz-card>

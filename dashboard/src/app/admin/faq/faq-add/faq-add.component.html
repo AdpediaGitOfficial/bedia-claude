@@ -1,0 +1,97 @@
+<nz-card>
+  <!-- Breadcrumb -->
+  <nz-breadcrumb>
+    <nz-breadcrumb-item>
+      <a routerLink="/dashboard/home">
+        <i nz-icon nzType="home"></i>
+        Home
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <a routerLink="/admin/faqs">FAQs</a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>Add FAQ</nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <!-- Heading -->
+  <div class="row m-b-30">
+    <div class="col-12">
+      <h1 class="page-heading">Add FAQ</h1>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <form
+    nz-form
+    nzLayout="vertical"
+    [formGroup]="faqForm"
+    (ngSubmit)="submitForm()"
+  >
+    <div class="row">
+
+      <!-- Question -->
+      <div class="col-md-6 m-b-10">
+        <nz-form-item>
+          <nz-form-label nzRequired>Question</nz-form-label>
+          <nz-form-control nzErrorTip="Question is required">
+            <input
+              nz-input
+              formControlName="question"
+              placeholder="Enter FAQ question"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <!-- Category -->
+      <div class="col-md-6 m-b-10">
+        <nz-form-item>
+          <nz-form-label>Category</nz-form-label>
+          <nz-form-control>
+            <input
+              nz-input
+              formControlName="category"
+              placeholder="Optional category"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <!-- Answer -->
+      <div class="col-md-12 m-b-10">
+        <nz-form-item>
+          <nz-form-label nzRequired>Answer</nz-form-label>
+          <nz-form-control nzErrorTip="Answer is required">
+            <textarea
+              nz-input
+              rows="4"
+              formControlName="answer"
+              placeholder="Enter FAQ answer"
+            ></textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <!-- Status -->
+      <div class="col-md-4 m-b-10">
+        <nz-form-item>
+          <nz-form-label>Status</nz-form-label>
+          <nz-form-control>
+            <nz-radio-group formControlName="isActive">
+              <label nz-radio-button [nzValue]="true">Active</label>
+              <label nz-radio-button [nzValue]="false">Inactive</label>
+            </nz-radio-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+    </div>
+
+    <!-- Submit -->
+    <div class="d-flex justify-content-end mt-4">
+      <button nz-button nzType="primary" [nzLoading]="isSubmitting">
+        Submit
+      </button>
+    </div>
+  </form>
+</nz-card>

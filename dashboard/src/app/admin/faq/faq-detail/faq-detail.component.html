@@ -1,0 +1,77 @@
+<nz-card>
+
+  <!-- Breadcrumb -->
+  <nz-breadcrumb class="mb-4">
+    <nz-breadcrumb-item>
+      <a routerLink="/dashboard/home">
+        <i nz-icon nzType="home"></i>
+        Home
+      </a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>
+      <a routerLink="/admin/faqs">FAQs</a>
+    </nz-breadcrumb-item>
+    <nz-breadcrumb-item>FAQ Details</nz-breadcrumb-item>
+  </nz-breadcrumb>
+
+  <!-- Details Card -->
+  <nz-card nzTitle="FAQ Details" class="shadow-sm rounded-card">
+    <table class="product-info-table">
+      <tbody>
+
+        <tr>
+          <td>Question</td>
+          <td class="fw-semibold">
+            {{ displayDetails?.question }}
+          </td>
+        </tr>
+
+        <tr>
+          <td>Answer</td>
+          <td>
+            {{ displayDetails?.answer }}
+          </td>
+        </tr>
+
+        <tr>
+          <td>Category</td>
+          <td>
+            {{ displayDetails?.category || 'N/A' }}
+          </td>
+        </tr>
+
+        <tr>
+          <td>Status</td>
+          <td>
+            <nz-tag [nzColor]="displayDetails?.isActive ? 'green' : 'red'">
+              {{ displayDetails?.isActive ? 'Active' : 'Inactive' }}
+            </nz-tag>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Created At</td>
+          <td>
+            {{ displayDetails?.createdAt | date: 'medium' }}
+          </td>
+        </tr>
+
+        <tr>
+          <td>Updated At</td>
+          <td>
+            {{ displayDetails?.updatedAt | date: 'medium' }}
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </nz-card>
+
+  <!-- Back Button -->
+  <div class="text-end mt-4">
+    <button nz-button nzType="default" routerLink="/admin/faqs">
+      Back
+    </button>
+  </div>
+
+</nz-card>

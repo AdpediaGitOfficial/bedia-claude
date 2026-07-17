@@ -1,0 +1,67 @@
+<nz-card>
+    <nz-breadcrumb class="mb-4">
+      <nz-breadcrumb-item>
+        <a [routerLink]="'/dashboard/home'">
+          <i nz-icon nzType="home" theme="outline"></i>
+          <span>Home</span>
+        </a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>
+        <a [routerLink]="'/admin/onlinepayments'">
+          <span>Online Payments</span>
+        </a>
+      </nz-breadcrumb-item>
+      <nz-breadcrumb-item>Online Payment Details</nz-breadcrumb-item>
+    </nz-breadcrumb>
+    
+      <nz-card nzTitle="Online Payment Details" class="shadow-sm p-3 rounded-card">  
+        <table class="product-info-table m-t-20" style="width: 100%;">
+            <tbody>
+                <tr>
+                    <td style="width: 25%; font-weight: bold;">Student Name:</td>
+                    <td style="width: 25%;">{{ dislayDetails.studentId.fullName }}</td>
+                    <td style="width: 25%; font-weight: bold;">Package:</td>
+                    <td style="width: 25%;">{{ dislayDetails.packageId.packageName }}</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Amount:</td>
+                    <td>{{ dislayDetails.paymentId.amount }}</td>
+                    <td style="font-weight: bold;">Status:</td> 
+                    <td >
+                        <nz-tag [nzColor]="dislayDetails.paymentId.status === 'paid' ? 'green' : 'red'">
+                          {{ dislayDetails.paymentId.status }}
+                        </nz-tag>
+                    </td>                    
+                </tr> 
+                <tr>
+                  <td style="font-weight: bold;">Subscription Start Date:</td>
+                  <td>{{ dislayDetails.subscriptionStartDate | date: 'mediumDate' }}</td>
+                  <td style="font-weight: bold;">Subscription End Date:</td>
+                  <td>{{ dislayDetails.subscriptionEndDate | date: 'mediumDate' }}</td>
+               </tr> 
+               <tr>
+                <td style="font-weight: bold;">Payment Reference Number :</td>
+                <td>{{ dislayDetails.paymentId.paymentRef }}</td>
+                <td style="font-weight: bold;">Paid Date:</td>
+                <td>{{ dislayDetails.paymentId.paymentDate | date: 'mediumDate' }}</td>
+              </tr> 
+                <tr>
+                    <td style="font-weight: bold;">Remarks:</td>
+                    <td colspan="3">{{ dislayDetails.comment || 'N/A' }}</td>                                       
+                </tr>                
+            </tbody>
+        </table> 
+    </nz-card>
+    
+    <div class="text-end m-t-20">
+      <button
+        nz-button
+        nzType="primary"
+        [routerLink]="'/admin/onlinepayments'"
+        title="Back to List"
+      >
+        Back
+      </button>
+    </div>
+  </nz-card>
+  
