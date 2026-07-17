@@ -1,0 +1,265 @@
+swagger: '3.0.0'
+info:
+  title: Testimonial Model API
+  description: API related to Testimonial models
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Local server
+  - url: https://bediapottery.ae/
+    description: Live server
+paths:
+  /testimonial/all:
+    get:
+      summary: get all testimonials
+      description: Endpoint to get all testimonials
+      tags:
+        - Testimonial Model
+      parameters:
+        - name: search
+          in: query
+          description: keyword for search
+          required: false
+          schema:
+            type: string
+            example: john
+        - name: page
+          in: query
+          description: page  number for pagination
+          required: false
+          schema:
+            type: number
+            example: 1
+        - name: limit
+          in: query
+          description: limit  for pagination
+          required: false
+          schema:
+            type: number
+            example: 10
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched Testimonials Successfully
+                  result:
+                    type: string
+                    example: []
+  /testimonial/adminAll:
+    get:
+      summary: get all testimonials  for dashboard
+      description: Endpoint to get all testimonials  for dashboard
+      tags:
+        - Testimonial Model
+      security:
+        - JWT: []
+      parameters:
+        - name: search
+          in: query
+          description: keyword for search
+          required: false
+          schema:
+            type: string
+            example: john
+        - name: page
+          in: query
+          description: page  number for pagination
+          required: false
+          schema:
+            type: number
+            example: 1
+        - name: limit
+          in: query
+          description: limit  for pagination
+          required: false
+          schema:
+            type: number
+            example: 10
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched Testimonials Successfully
+                  result:
+                    type: string
+                    example: []
+  /testimonial:
+    post:
+      summary: Create Testimonial
+      description: Endpoint to create Testimonial
+      tags:
+        - Testimonial Model
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                author:
+                  type: string
+                authorImage:
+                  type: string
+                designation:
+                  type: string
+              required:
+                - content
+                - author
+                - designation
+                - authorImage
+
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Created Testimonial successfully
+                  result:
+                    type: boolean
+                    example: true
+
+  /testimonial/{id}:
+    get:
+      summary: get Testimonial by id
+      description: Endpoint to get a Testimonial detail by id
+      tags:
+        - Testimonial Model
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: Testimonial Id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched Testimonial Successfully
+                  result:
+                    type: string
+                    example: []
+    put:
+      summary: update Testimonial by id
+      description: Endpoint to update Testimonial by id
+      tags:
+        - Testimonial Model
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: Testimonial Id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                author:
+                  type: string
+                authorImage:
+                  type: string
+                designation:
+                  type: string
+              required:
+                - content
+                - author
+                - designation
+                - authorImage
+
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Updated Testimonial successfully
+                  result:
+                    type: boolean
+                    example: true
+    delete:
+      summary: delete Testimonial by id
+      description: Endpoint to delete Testimonial a Testimonial by id
+      tags:
+        - Testimonial Model
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: Testimonial Id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Deleted Testimonial successfully
+                  result:
+                    type: boolean
+                    example: true

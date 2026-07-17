@@ -1,0 +1,195 @@
+tags:
+  - name: FAQ
+    description: FAQ management APIs
+
+paths:
+  /faq/all:
+    get:
+      tags: [FAQ]
+      summary: Get all active FAQs (Public)
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: number
+            example: 1
+        - name: limit
+          in: query
+          schema:
+            type: number
+            example: 10
+      responses:
+        200:
+          description: FAQs fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaqListResponse'
+
+  /faq/adminAll:
+    get:
+      tags: [FAQ]
+      summary: Get all FAQs (Admin)
+      security:
+        - JWT: []
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: number
+        - name: limit
+          in: query
+          schema:
+            type: number
+        - name: isActive
+          in: query
+          schema:
+            type: boolean
+      responses:
+        200:
+          description: Admin FAQs fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaqListResponse'
+
+  /faq:
+    post:
+      tags: [FAQ]
+      summary: Create FAQ
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FaqBody'
+      responses:
+        201:
+          description: FAQ created successfully
+
+  /faq/{id}:
+    get:
+      tags: [FAQ]
+      summary: Get FAQ by ID
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: FAQ fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaqSingleResponse'
+
+    put:
+      tags: [FAQ]
+      summary: Update FAQ
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FaqBody'
+      responses:
+        200:
+          description: FAQ updated successfully
+
+    delete:
+      tags: [FAQ]
+      summary: Delete FAQ
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: FAQ deleted successfully
+
+components:
+  schemas:
+    Faq:
+      type: object
+      properties:
+        _id:
+          type: string
+        question:
+          type: string
+        answer:
+          type: string
+        category:
+          type: string
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+
+    FaqBody:
+      type: object
+      required:
+        - question
+        - answer
+      properties:
+        question:
+          type: string
+          example: What should I wear?
+        answer:
+          type: string
+          example: Comfortable clothes are recommended.
+        category:
+          type: string
+          example: General
+        isActive:
+          type: boolean
+          example: true
+
+    FaqListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: FAQs fetched successfully
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Faq'
+
+    FaqSingleResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: FAQ fetched successfully
+        result:
+          $ref: '#/components/schemas/Faq'

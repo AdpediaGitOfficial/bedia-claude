@@ -1,0 +1,257 @@
+swagger: '3.0.0'
+info:
+  title: Partner Model API
+  description: API related to Partner models
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Local server
+  - url: https://bediapottery.ae/
+    description: Live server
+paths:
+  /partner/all:
+    get:
+      summary: get all partners
+      description: Endpoint to get all partners
+      tags:
+        - Partner Model
+      parameters:
+        - name: search
+          in: query
+          description: keyword for search
+          required: false
+          schema:
+            type: string
+            example: john
+        - name: page
+          in: query
+          description: page  number for pagination
+          required: false
+          schema:
+            type: number
+            example: 1
+        - name: limit
+          in: query
+          description: limit  for pagination
+          required: false
+          schema:
+            type: number
+            example: 10
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched Partners Successfully
+                  result:
+                    type: string
+                    example: []
+  /partner/adminAll:
+    get:
+      summary: get all partners for dashboard
+      description: Endpoint to get all partners for dashboard
+      tags:
+        - Partner Model
+      security:
+        - JWT: []
+      parameters:
+        - name: search
+          in: query
+          description: keyword for search
+          required: false
+          schema:
+            type: string
+            example: john
+        - name: page
+          in: query
+          description: page  number for pagination
+          required: false
+          schema:
+            type: number
+            example: 1
+        - name: limit
+          in: query
+          description: limit  for pagination
+          required: false
+          schema:
+            type: number
+            example: 10
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched Partners Successfully
+                  result:
+                    type: string
+                    example: []
+  /partner:
+    post:
+      summary: Create Partner
+      description: Endpoint to create Partner
+      tags:
+        - Partner Model
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                logo:
+                  type: string
+                websiteUrl:
+                  type: string
+              required:
+                - name
+                - logo
+                - websiteUrl
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Created Partner successfully
+                  result:
+                    type: boolean
+                    example: true
+
+  /partner/{id}:
+    get:
+      summary: get Partner by id
+      description: Endpoint to get a Partner detail by id
+      tags:
+        - Partner Model
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: Partner Id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched Partner Successfully
+                  result:
+                    type: string
+                    example: []
+    put:
+      summary: update Partner by id
+      description: Endpoint to update Partner by id
+      tags:
+        - Partner Model
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: Partner Id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                logo:
+                  type: string
+                websiteUrl:
+                  type: string
+              required:
+                - name
+                - logo
+                - websiteUrl
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Updated Partner successfully
+                  result:
+                    type: boolean
+                    example: true
+    delete:
+      summary: delete Partner by id
+      description: Endpoint to delete Partner a Partner by id
+      tags:
+        - Partner Model
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: Partner Id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Deleted Partner successfully
+                  result:
+                    type: boolean
+                    example: true

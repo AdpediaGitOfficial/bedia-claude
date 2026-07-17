@@ -1,0 +1,251 @@
+swagger: '3.0.0'
+info:
+  title: Category Model API
+  description: API related to Category models
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Local server
+  - url: https://bediapottery.ae/
+    description: Live server
+paths:
+  /category/all:
+    get:
+      summary: get all categories
+      description: Endpoint to get all categories
+      tags:
+        - Category Model
+      parameters:
+        # - name: search
+        #   in: query
+        #   description: keyword for search
+        #   required: false
+        #   schema:
+        #     type: string
+        #     example: john
+        - name: page
+          in: query
+          description: page  number for pagination
+          required: false
+          schema:
+            type: number
+            example: 1
+        - name: limit
+          in: query
+          description: limit  for pagination
+          required: false
+          schema:
+            type: number
+            example: 10
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched categories Successfully
+                  result:
+                    type: string
+                    example: []
+  /category/adminAll:
+    get:
+      summary: get all categories
+      description: Endpoint to get all categories
+      tags:
+        - Category Model
+      security:
+        - JWT: []
+      parameters:
+        - name: search
+          in: query
+          description: keyword for search
+          required: false
+          schema:
+            type: string
+            example: award
+        - name: page
+          in: query
+          description: page  number for pagination
+          required: false
+          schema:
+            type: number
+            example: 1
+        - name: limit
+          in: query
+          description: limit  for pagination
+          required: false
+          schema:
+            type: number
+            example: 10
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched categories Successfully
+                  result:
+                    type: string
+                    example: []
+  /category:
+    post:
+      summary: Create category
+      description: Endpoint to create category
+      tags:
+        - Category Model
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                isActive:
+                  type: boolean
+              required:
+                - title
+
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Created category successfully
+                  result:
+                    type: boolean
+                    example: true
+
+  /category/{id}:
+    get:
+      summary: get category by id
+      description: Endpoint to get a category detail by id
+      tags:
+        - Category Model
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: category Id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched category Successfully
+                  result:
+                    type: string
+                    example: []
+    put:
+      summary: update category by id
+      description: Endpoint to update category by id
+      tags:
+        - Category Model
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: category Id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                isActive:
+                  type: boolean
+              required:
+                - title
+
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Updated category successfully
+                  result:
+                    type: boolean
+                    example: true
+    delete:
+      summary: delete category by id
+      description: Endpoint to delete category a category by id
+      tags:
+        - Category Model
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: category Id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Deleted category successfully
+                  result:
+                    type: boolean
+                    example: true

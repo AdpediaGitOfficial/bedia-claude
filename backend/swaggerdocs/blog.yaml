@@ -1,0 +1,369 @@
+swagger: '3.0.0'
+info:
+  title: Blog Model API
+  description: API related to Blog models
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Local server
+  - url: https://bediapottery.ae/
+    description: Live server
+paths:
+  /blog/all:
+    get:
+      summary: get all blogs
+      description: Endpoint to get all blogs
+      tags:
+        - Blog Model
+      parameters:
+        - name: search
+          in: query
+          description: keyword for search
+          required: false
+          schema:
+            type: string
+            example: flat
+        - name: page
+          in: query
+          description: page  number for pagination
+          required: false
+          schema:
+            type: number
+            example: 1
+        - name: limit
+          in: query
+          description: limit  for pagination
+          required: false
+          schema:
+            type: number
+            example: 10
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched Blogs Successfully
+                  result:
+                    type: string
+                    example: []
+  /blog/adminAll:
+    get:
+      summary: get all blogs for dashboard
+      description: Endpoint to get all blogs for dashboard
+      tags:
+        - Blog Model
+      security:
+        - JWT: []
+      parameters:
+        - name: search
+          in: query
+          description: keyword for search
+          required: false
+          schema:
+            type: string
+            example: flat
+        - name: page
+          in: query
+          description: page  number for pagination
+          required: false
+          schema:
+            type: number
+            example: 1
+        - name: limit
+          in: query
+          description: limit  for pagination
+          required: false
+          schema:
+            type: number
+            example: 10
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched Blogs Successfully
+                  result:
+                    type: string
+                    example: []
+  /blog:
+    post:
+      summary: Create Blog
+      description: Endpoint to create Blog
+      tags:
+        - Blog Model
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+                bannerImage:
+                  type: string
+                category:
+                  type: string
+                metaTitle:
+                  type: string
+                metaDescription:
+                  type: string
+              required:
+                - title
+                - content
+                - category
+                - bannerImage
+                - metaTitle
+                - metaDescription
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Created Blog successfully
+                  result:
+                    type: boolean
+                    example: true
+  /blog/xml:
+    post:
+      summary: fetch and insert data from xml file
+      description: Endpoint to fetch and insert data from xml file
+      tags:
+        - Blog Model
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched Blogs successfully
+                  result:
+                    type: string
+                    example: []
+  /blog/slug/{slug}:
+    get:
+      summary: get Blog by slug
+      description: Endpoint to get a Blog detail by slug
+      tags:
+        - Blog Model
+      parameters:
+        - name: slug
+          in: path
+          description: Blog slug
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched Blog Successfully
+                  result:
+                    type: string
+                    example: []
+  /blog/meta/{slug}:
+    get:
+      summary: get blog meta data by slug
+      description: Endpoint to get a Meta data of blog by slug
+      tags:
+        - Blog Model
+      parameters:
+        - name: slug
+          in: path
+          description: Blog slug
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched meta data Successfully
+                  result:
+                    type: string
+                    example: []
+  /blog/{id}:
+    get:
+      summary: get Blog by id
+      description: Endpoint to get a Blog detail by id
+      tags:
+        - Blog Model
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: Blog Id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched Blog Successfully
+                  result:
+                    type: string
+                    example: []
+    put:
+      summary: update Blog by id
+      description: Endpoint to update Blog by id
+      tags:
+        - Blog Model
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: Blog Id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+                bannerImage:
+                  type: string
+                category:
+                  type: string
+                metaTitle:
+                  type: string
+                metaDescription:
+                  type: string
+              required:
+                - title
+                - content
+                - category
+                - bannerImage
+                - metaTitle
+                - metaDescription
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Updated Blog successfully
+                  result:
+                    type: boolean
+                    example: true
+    delete:
+      summary: delete Blog by id
+      description: Endpoint to delete Blog a Blog by id
+      tags:
+        - Blog Model
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: Blog Id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Deleted Blog successfully
+                  result:
+                    type: boolean
+                    example: true

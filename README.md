@@ -1,126 +1,44 @@
-# Bedia Pottery - Premium Ceramic Studio
+# Bedia Privé — Monorepo
 
-A modern, responsive Next.js website for Bedia Pottery, a premium ceramic studio offering pottery classes and workshops.
-
-## Features
-
-- 🎨 Modern, clean UI with dark green and white theme
-- 📱 Fully responsive design
-- ⚡ Built with Next.js 14, TypeScript, and Tailwind CSS
-- 🏗️ Component-based architecture following SOLID principles
-- 🎯 SEO optimized with proper metadata
-
-## Tech Stack
-
-- **Framework:** Next.js 14 (App Router)
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS
-- **Architecture:** Component-based with SOLID principles
-
-## Project Structure
+This repository groups the three parts of the Bedia Privé / Bediapottery platform.
 
 ```
-bedia-pottery/
-├── app/
-│   ├── layout.tsx          # Root layout
-│   ├── page.tsx            # Homepage
-│   └── globals.css         # Global styles
-├── components/
-│   ├── layout/
-│   │   ├── Header.tsx      # Navigation header
-│   │   └── Footer.tsx      # Footer component
-│   ├── sections/
-│   │   ├── HeroSection.tsx      # Hero carousel
-│   │   ├── ContentGrid.tsx      # Content grid with CTA
-│   │   └── TestimonialsSection.tsx  # Testimonials
-│   └── ui/
-│       ├── Logo.tsx        # Logo component
-│       ├── Button.tsx      # Reusable button
-│       └── IconButton.tsx  # Icon button component
-├── constants/
-│   └── data.ts            # Data constants (separated from components)
-├── types/
-│   └── index.ts           # TypeScript type definitions
-└── public/
-    └── images/            # Image assets (to be added)
+.
+├── frontend/    Next.js public site (React, TypeScript, Tailwind)
+├── backend/     REST API (Node.js, Express, TypeScript, Mongoose/MongoDB)
+├── database/    MongoDB dump (mongodump BSON) of `bediaprive_db`
+└── docs/        Analysis & documentation
 ```
 
-## SOLID Principles Implementation
+## Contents
 
-1. **Single Responsibility:** Each component has one clear purpose
-   - `Header` handles navigation
-   - `HeroSection` manages hero carousel
-   - `TestimonialsSection` displays testimonials
-   - UI components are reusable and focused
+| Path | Description |
+|------|-------------|
+| [`frontend/`](frontend/) | The customer-facing web app. See `frontend/README.md`. |
+| [`backend/`](backend/) | The Express API serving workshops, bookings, Stripe checkout, CMS content, leads, and the admin dashboard. Copy `backend/.env.example` → `backend/.env` and fill in values. |
+| [`database/bediaprive_db/`](database/) | BSON dump for local restore via `mongorestore`. |
+| [`docs/BACKEND_ANALYSIS.md`](docs/BACKEND_ANALYSIS.md) | Comprehensive backend + database analysis (architecture, ERD, data flow, security/perf findings). |
 
-2. **Open/Closed:** Components are extensible through props
-   - `Button` accepts variant props for different styles
-   - `Logo` supports different variants (default/white)
-   - Components can be extended without modification
+## Local setup (quick)
 
-3. **Liskov Substitution:** Components are substitutable
-   - All UI components follow consistent interfaces
-   - Can be swapped with alternative implementations
-
-4. **Interface Segregation:** TypeScript interfaces are specific
-   - Separate interfaces for different data types
-   - Components only depend on what they need
-
-5. **Dependency Inversion:** Depend on abstractions
-   - Data separated into constants file
-   - Components depend on types/interfaces, not concrete data
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+ 
-- npm or yarn
-
-### Installation
-
-1. Install dependencies:
 ```bash
+# Backend
+cd backend
+cp .env.example .env        # then fill in real values
 npm install
-```
+npm run start:dev
 
-2. Add images to `public/images/` directory:
-   - `hero-1.jpg`, `hero-2.jpg` - Hero section images
-   - `adults-workshop.jpg` - Adults workshop image
-   - `kids-workshop.jpg` - Kids workshop image
-   - `family-workshop.jpg` - Family workshop image
-   - `testimonial-rahul.jpg` - Testimonial profile image
-   - `testimonial-ayesha.jpg` - Testimonial profile image
-   - `testimonial-sarah.jpg` - Testimonial profile image
-
-3. Run the development server:
-```bash
+# Frontend (separate terminal)
+cd frontend
+npm install
 npm run dev
+
+# Restore the database dump (optional, local Mongo)
+mongorestore --db bediapottery database/bediaprive_db
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+## Security notes
 
-## Theme Configuration
-
-The theme uses a dark green (`#1a4d3a`) and white color scheme, configured in `tailwind.config.ts`:
-
-- Primary: Dark green (`#1a4d3a`)
-- Secondary: White
-- Custom utilities in `globals.css` for consistent styling
-
-## Customization
-
-- **Colors:** Edit `tailwind.config.ts` to change the color scheme
-- **Content:** Update `constants/data.ts` to modify page content
-- **Components:** All components are modular and can be easily customized
-
-## Build for Production
-
-```bash
-npm run build
-npm start
-```
-
-## License
-
-© 2024 Bedia Pottery LLC
+- **Never commit real secrets.** `backend/.env` is git-ignored; only `backend/.env.example` (placeholders) is tracked. Any secret that was previously committed should be considered compromised and rotated.
+- **`database/` contains real customer PII and bcrypt password hashes.** Treat this repository as private and handle the dump accordingly.
+- See `docs/BACKEND_ANALYSIS.md` for the full list of known security issues and recommended fixes.

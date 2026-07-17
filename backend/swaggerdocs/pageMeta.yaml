@@ -1,0 +1,258 @@
+swagger: '3.0.0'
+info:
+  title: Page Meta Model API
+  description: API related to Page Meta data models
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Local server
+  - url: https://bediapottery.ae/
+    description: Live server
+paths:
+  /meta-data/adminAll:
+    get:
+      summary: get all meta data
+      description: Endpoint to get all meta data
+      tags:
+        - Page Meta Model
+      security:
+        - JWT: []
+      parameters:
+        - name: search
+          in: query
+          description: keyword for search
+          required: false
+          schema:
+            type: string
+            example: dejavu
+        - name: page
+          in: query
+          description: page  number for pagination
+          required: false
+          schema:
+            type: number
+            example: 1
+        - name: limit
+          in: query
+          description: limit  for pagination
+          required: false
+          schema:
+            type: number
+            example: 10
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched meta data Successfully
+                  result:
+                    type: string
+                    example: []
+  /meta-data:
+    post:
+      summary: Create meta data
+      description: Endpoint to create meta data
+      tags:
+        - Page Meta Model
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                image:
+                  type: string
+                url:
+                  type: string
+                keywords:
+                  type: string
+              required:
+                - title
+                - description
+                - image
+                - url
+                - keywords
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Created meta data successfully
+                  result:
+                    type: boolean
+                    example: true
+
+  /meta-data/page-data:
+    post:
+      summary: get meta data by page url
+      description: Endpoint to get a meta data detail by page url
+      tags:
+        - Page Meta Model
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+              required:
+                - url
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched meta data Successfully
+                  result:
+                    type: string
+                    example: []
+  /meta-data/{id}:
+    get:
+      summary: get meta data by id
+      description: Endpoint to get a meta data detail by id
+      tags:
+        - Page Meta Model
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: meta data Id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched meta data Successfully
+                  result:
+                    type: string
+                    example: []
+    put:
+      summary: update meta data by id
+      description: Endpoint to update meta data by id
+      tags:
+        - Page Meta Model
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: meta data Id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                image:
+                  type: string
+                url:
+                  type: string
+                keywords:
+                  type: string
+              required:
+                - title
+                - description
+                - image
+                - url
+                - keywords
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Updated meta data successfully
+                  result:
+                    type: boolean
+                    example: true
+    delete:
+      summary: delete meta data by id
+      description: Endpoint to delete meta data by id
+      tags:
+        - Page Meta Model
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: meta data Id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Deleted meta data successfully
+                  result:
+                    type: boolean
+                    example: true

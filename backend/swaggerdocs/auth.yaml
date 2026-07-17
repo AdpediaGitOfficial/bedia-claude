@@ -1,0 +1,362 @@
+swagger: '3.0.0'
+info:
+  title: Auth Model API
+  description: API related to Authentication models
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Local server
+  - url: https://bediapottery.ae/
+    description: Live server
+paths:
+  /auth/register:
+    post:
+      summary: Register User
+      description: Endpoint to register new User
+      tags:
+        - Auth Model
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                designation:
+                  type: string
+              required:
+                - name
+                - email
+                - password
+                - designation
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: User created successfully
+                  result:
+                    type: boolean
+                    example: true
+  /auth/login:
+    post:
+      summary: User login
+      description: Endpoint to login User
+      tags:
+        - Auth Model
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: User logged in successfully
+                  result:
+                    type: boolean
+                    example: true
+  /auth/verifyToken:
+    post:
+      summary: Verify token route
+      description: Endpoint to verify  jw token
+      tags:
+        - Auth Model
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+              required:
+                - token
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Token verified Successfully
+                  result:
+                    type: boolean
+                    example: true
+  /auth/user/all:
+    get:
+      summary: get all users for dashboard
+      description: Endpoint to get all users for dashboard
+      tags:
+        - User Model
+      security:
+        - JWT: []
+      parameters:
+        - name: search
+          in: query
+          description: keyword for search
+          required: false
+          schema:
+            type: string
+            example: john
+        - name: page
+          in: query
+          description: page  number for pagination
+          required: false
+          schema:
+            type: number
+            example: 1
+        - name: limit
+          in: query
+          description: limit  for pagination
+          required: false
+          schema:
+            type: number
+            example: 10
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched Users Successfully
+                  result:
+                    type: string
+                    example: []
+  /auth/user/dashboard-data:
+    get:
+      summary: get all data for dashboard
+      description: Endpoint to get all data for dashboard
+      tags:
+        - User Model
+      security:
+        - JWT: []
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fetched dashboard data Successfully
+                  result:
+                    type: string
+                    example: []
+  /auth/change-password:
+    put:
+      summary: update User Password
+      description: Endpoint to update User Password
+      tags:
+        - User Model
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                newPassword:
+                  type: string
+                oldPassword:
+                  type: string
+              required:
+                - email
+                - oldPassword
+                - newPassword
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Changed Password successfully
+                  result:
+                    type: boolean
+                    example: true
+  /auth/user/{id}:
+    # get:
+    #   summary: get User by id
+    #   description: Endpoint to get a User detail by id
+    #   tags:
+    #     - User Model
+    #   parameters:
+    #     - name: id
+    #       in: path
+    #       description: User Id
+    #       required: true
+    #       schema:
+    #         type: string
+    #   responses:
+    #     200:
+    #       description: Success response
+    #       content:
+    #         application/json:
+    #           schema:
+    #             type: object
+    #             properties:
+    #               success:
+    #                 type: boolean
+    #                 example: true
+    #               message:
+    #                 type: string
+    #                 example: Fetched User Successfully
+    #               result:
+    #                 type: string
+    #                 example: []
+    # put:
+    #   summary: update User by id
+    #   description: Endpoint to update User by id
+    #   tags:
+    #     - User Model
+    #   parameters:
+    #     - name: id
+    #       in: path
+    #       description: User Id
+    #       required: true
+    #       schema:
+    #         type: string
+    #   requestBody:
+    #     required: true
+    #     content:
+    #       application/json:
+    #         schema:
+    #           type: object
+    #           properties:
+    #             name:
+    #               type: string
+    #             email:
+    #               type: string
+    #             newPassword:
+    #               type: string
+    #             oldPassword:
+    #               type: string
+    #             designation:
+    #               type: string
+    #           required:
+    #             - name
+    #             - email
+    #             - oldPassword
+    #             - newPassword
+    #             - designation
+    #   responses:
+    #     200:
+    #       description: Success response
+    #       content:
+    #         application/json:
+    #           schema:
+    #             type: object
+    #             properties:
+    #               success:
+    #                 type: boolean
+    #                 example: true
+    #               message:
+    #                 type: string
+    #                 example: Updated User successfully
+    #               result:
+    #                 type: boolean
+    #                 example: true
+    delete:
+      summary: delete User by id
+      description: Endpoint to delete User a User by id
+      tags:
+        - User Model
+      security:
+        - JWT: []
+      parameters:
+        - name: id
+          in: path
+          description: User Id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Deleted User successfully
+                  result:
+                    type: boolean
+                    example: true
+
+components:
+  securitySchemes:
+    JWT:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: JWT Bearer token

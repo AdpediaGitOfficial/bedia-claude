@@ -1,0 +1,254 @@
+/brochure/all:
+  get:
+    summary: get all brochures
+    description: Endpoint to get all brochures
+    tags:
+      - Brochure Model
+    parameters:
+      - name: search
+        in: query
+        description: keyword for search
+        required: false
+        schema:
+          type: string
+          example: design
+      - name: page
+        in: query
+        description: page number for pagination
+        required: false
+        schema:
+          type: number
+          example: 1
+      - name: limit
+        in: query
+        description: limit for pagination
+        required: false
+        schema:
+          type: number
+          example: 10
+    responses:
+      200:
+        description: Success response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                message:
+                  type: string
+                  example: Fetched Brochures Successfully
+                result:
+                  type: string
+                  example: []
+
+/brochure/adminAll:
+  get:
+    summary: get all brochures for dashboard
+    description: Endpoint to get all brochures for dashboard
+    tags:
+      - Brochure Model
+    security:
+      - JWT: []
+    parameters:
+      - name: search
+        in: query
+        description: keyword for search
+        required: false
+        schema:
+          type: string
+          example: design
+      - name: page
+        in: query
+        description: page number for pagination
+        required: false
+        schema:
+          type: number
+          example: 1
+      - name: limit
+        in: query
+        description: limit for pagination
+        required: false
+        schema:
+          type: number
+          example: 10
+    responses:
+      200:
+        description: Success response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                message:
+                  type: string
+                  example: Fetched Brochures Successfully
+                result:
+                  type: string
+                  example: []
+
+/brochure:
+  post:
+    summary: Create Brochure
+    description: Endpoint to create Brochure
+    tags:
+      - Brochure Model
+    security:
+      - JWT: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+              image:
+                type: array
+                items:
+                  type: string
+              description:
+                type: string
+              isActive:
+                type: boolean
+            required:
+              - title
+    responses:
+      200:
+        description: Success response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                message:
+                  type: string
+                  example: Created Brochure successfully
+                result:
+                  type: boolean
+                  example: true
+
+/brochure/{id}:
+  get:
+    summary: get Brochure by id
+    description: Endpoint to get a Brochure detail by id
+    tags:
+      - Brochure Model
+    security:
+      - JWT: []
+    parameters:
+      - name: id
+        in: path
+        description: Brochure Id
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Success response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                message:
+                  type: string
+                  example: Fetched Brochure Successfully
+                result:
+                  type: string
+                  example: []
+
+  put:
+    summary: update Brochure by id
+    description: Endpoint to update Brochure by id
+    tags:
+      - Brochure Model
+    security:
+      - JWT: []
+    parameters:
+      - name: id
+        in: path
+        description: Brochure Id
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+              image:
+                type: array
+                items:
+                  type: string
+              description:
+                type: string
+              isActive:
+                type: boolean
+            required:
+              - title
+    responses:
+      200:
+        description: Success response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                message:
+                  type: string
+                  example: Updated Brochure successfully
+                result:
+                  type: boolean
+                  example: true
+
+  delete:
+    summary: delete Brochure by id
+    description: Endpoint to delete Brochure by id
+    tags:
+      - Brochure Model
+    security:
+      - JWT: []
+    parameters:
+      - name: id
+        in: path
+        description: Brochure Id
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: Success response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                success:
+                  type: boolean
+                  example: true
+                message:
+                  type: string
+                  example: Deleted Brochure successfully
+                result:
+                  type: boolean
+                  example: true
