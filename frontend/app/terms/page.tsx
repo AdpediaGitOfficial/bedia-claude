@@ -8,6 +8,9 @@ export const metadata = {
     "Read the terms and conditions for booking workshops with Bedia Pottery.",
 };
 
+// ISR: tolerate an API outage at build time and refresh with live data.
+export const revalidate = 300;
+
 export default async function TermsPage() {
   const termsData = await getTermsData();
   return (
