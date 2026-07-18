@@ -9,6 +9,15 @@ const RETRY_INTERVAL = 3000;
 let retryCount = 0;
 
 function connectToDatabase() {
+  // Fail fast on a missing connection string instead of retrying an
+  // `undefined` URI 20 times with opaque errors.
+  if (!DB_URI) {
+    logger.error(
+      'DATABASE is not set. Provide a MongoDB connection string in the environment (see .env.example).',
+    );
+    process.exit(1);
+  }
+
   mongoose.set('strictQuery', false);
 
   function connect() {

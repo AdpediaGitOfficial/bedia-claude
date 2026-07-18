@@ -5,8 +5,7 @@
 export const environment = {
   production: false,
   tinyMceApiKey: 'afv9tsj95eidodl8qy5jmp0znjmizgcwi33enkpfdt4nd6ox',
-  //baseUrl: 'https://api.bediaprive.com',
-  baseUrl: 'https://api-bediaprive.adpedia.in', // test url
+  baseUrl: 'https://bedia-claud-backend.adpedia.in',
 };
 
 /*

@@ -46,7 +46,10 @@ export const fetchAllWorkshops = async (
 };
 
 export const fetchWorkshopsByCategory = async (query: any, skip: number, limit: number) => {
-  return await workshopModel
+  // `options` is fetched (not excluded) so we can surface the first option's
+  // price as a top-level `price`, then the full options array is dropped from
+  // the response.
+  const workshops = await workshopModel
     .find(query)
     .select({
       keyAdvantages: 0,
@@ -59,7 +62,6 @@ export const fetchWorkshopsByCategory = async (query: any, skip: number, limit: 
       defaultSlots: 0,
       nonAvailabilityDates: 0,
       nonAvailabilityDays: 0,
-      options: 0,
       showOnHomepage: 0,
       __v: 0,
       isActive: 0,
@@ -70,6 +72,14 @@ export const fetchWorkshopsByCategory = async (query: any, skip: number, limit: 
     .skip(skip)
     .limit(limit)
     .lean();
+
+  return workshops.map((workshop) => {
+    const { options, ...rest } = workshop as typeof workshop & {
+      options?: { price?: number }[];
+    };
+    const price = options && options.length > 0 ? options[0]?.price ?? null : null;
+    return { ...rest, price };
+  });
 };
 
 // export const fetchHomepageWorkshops = async () => {

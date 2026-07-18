@@ -9,6 +9,9 @@ export const metadata = {
   description: "Frequently asked questions about Bedia Pottery workshops."
 }
 
+// ISR: tolerate an API outage at build time and refresh with live data.
+export const revalidate = 300
+
 export default async function FAQPage() {
   const faqData = await getFaqData()
 
