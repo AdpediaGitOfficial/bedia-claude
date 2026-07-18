@@ -1,6 +1,6 @@
 import express from 'express';
 import logger from './config/logger';
-import cors from 'cors';
+import cors, { CorsOptions } from 'cors';
 import path from 'path';
 import connectToDatabase from './config/connectToDatabase';
 import errorHandleMiddleware from './middleware/errorHandleMiddleware';
@@ -51,12 +51,32 @@ if (!configKeys.JWT_SECRET) {
 connectToDatabase();
 
 app.use('/uploads', express.static(path.join(__dirname, './uploads')));
-const corsOptions = {
-  origin: JSON.parse(configKeys.CORS_URLS),
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD'],
+
+// Allowed browser origins from CORS_URLS (JSON array). Normalize trailing
+// slashes so "https://x.com" and "https://x.com/" both match.
+const allowedOrigins: string[] = JSON.parse(configKeys.CORS_URLS);
+const normalizeOrigin = (o: string): string => o.replace(/\/+$/, '');
+const allowedOriginSet = new Set(allowedOrigins.map(normalizeOrigin));
+
+const corsOptions: CorsOptions = {
+  origin(origin, callback) {
+    // Allow non-browser clients (curl, server-to-server, same-origin) that send
+    // no Origin header, and any explicitly allow-listed browser origin.
+    if (!origin || allowedOriginSet.has(normalizeOrigin(origin))) {
+      callback(null, true);
+    } else {
+      logger.warn(
+        `CORS blocked origin: ${origin}. Allowed: ${[...allowedOriginSet].join(', ')}`,
+      );
+      callback(null, false);
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
   credentials: true,
 };
 app.use(cors(corsOptions));
+// Ensure CORS preflight (OPTIONS) is answered for every route.
+app.options('*', cors(corsOptions));
 
 // For stripe
 app.post(
