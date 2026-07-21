@@ -16,6 +16,8 @@ import {
   createWorkshopOrderRepo,
   getAllWorkshopBookings,
   fetchWorkshopBookingById,
+  getAllOrders,
+  updateBookingStatusById,
   getCartByUserIdRepo,
   createCartRepo,
   fetchPotteryWorkshopAvailability,
@@ -1481,4 +1483,21 @@ export const checkPotteryWorkshopCapacityUseCase = async (data: {
   }
 
   return await fetchPotteryWorkshopCapacity(data);
+};
+
+// --- Admin: orders list + booking status update ---
+
+export const getOrdersUseCase = async (filters: any, limit: number, page: number) => {
+  return await getAllOrders(filters, limit, page);
+};
+
+export const updateBookingStatusUseCase = async (
+  id: string,
+  patch: { bookingStatus?: string; paymentStatus?: string },
+) => {
+  const updated = await updateBookingStatusById(id, patch);
+  if (!updated) {
+    throw new AppError('Booking not found', HttpStatus.NOT_FOUND);
+  }
+  return updated;
 };

@@ -12,7 +12,7 @@ import { validateQuery, validateReqBody } from '../../middleware/validate';
 import { getAllCategorySchema } from '../routevalidators/getAllCategory';
 import { JSONSchemaType } from 'ajv';
 import { createCategorySchema } from '../routevalidators/createCategory';
-import { userAuthMiddleware } from '../../middleware/auth/authMiddleware';
+import { requireAdmin } from '../../middleware/auth/adminRoleMiddleware';
 
 const router = Router();
 
@@ -23,25 +23,25 @@ router.get(
 );
 router.get(
   '/adminAll',
-  userAuthMiddleware,
+  requireAdmin,
   validateQuery(getAllCategorySchema as JSONSchemaType<unknown>),
   getAllCategoriesForAdmin,
 );
 router.post(
   '/',
-  userAuthMiddleware,
+  requireAdmin,
   validateReqBody(createCategorySchema as JSONSchemaType<unknown>),
   sanitizeBody,
   createCategory,
 );
 router.put(
   '/:id',
-  userAuthMiddleware,
+  requireAdmin,
   validateReqBody(createCategorySchema as JSONSchemaType<unknown>),
   sanitizeBody,
   updateCategoryById,
 );
-router.delete('/:id', userAuthMiddleware, deleteCategoryById);
-router.get('/:id', userAuthMiddleware, getCategoryById);
+router.delete('/:id', requireAdmin, deleteCategoryById);
+router.get('/:id', requireAdmin, getCategoryById);
 
 export default router;

@@ -22,6 +22,8 @@ import {
   validateGiftVoucher,
   confirmGiftRedemption,
   checkPotteryWorkshopCapacity,
+  getOrders,
+  updateBookingStatus,
 } from '../controllers/workshopController';
 import sanitizeBody from '../../middleware/sanitizeMiddleware';
 import { validateQuery, validateReqBody } from '../../middleware/validate';
@@ -29,6 +31,7 @@ import { getAllWorkshopSchema } from '../routevalidators/getAllWorkshops';
 import { JSONSchemaType } from 'ajv';
 import { createWorkshopSchema } from '../routevalidators/createWorkshop';
 import { userAuthMiddleware } from '../../middleware/auth/authMiddleware';
+import { requireAdmin } from '../../middleware/auth/adminRoleMiddleware';
 import { createWorkshopBookingSchema } from '../routevalidators/createWorkshopBooking';
 import { addToCartSchema } from '../routevalidators/addToCartSchema';
 import { generateGiftVoucher } from '../../utils/generateGiftVoucher';
@@ -155,27 +158,27 @@ router.get(
 
 router.get(
   '/adminAll',
-  userAuthMiddleware,
+  requireAdmin,
   validateQuery(getAllWorkshopSchema as JSONSchemaType<unknown>),
   getAllWorkshopsForAdmin,
 );
 router.post(
   '/',
-  userAuthMiddleware,
+  requireAdmin,
   validateReqBody(createWorkshopSchema as JSONSchemaType<unknown>),
   sanitizeBody,
   createWorkshop,
 );
 router.put(
   '/:id',
-  userAuthMiddleware,
+  requireAdmin,
   validateReqBody(createWorkshopSchema as JSONSchemaType<unknown>),
   sanitizeBody,
   updateWorkshopById,
 );
-router.delete('/:id', userAuthMiddleware, deleteWorkshopById);
+router.delete('/:id', requireAdmin, deleteWorkshopById);
 router.get('/bySlug/:slug', getWorkshopBySlug);
-router.get('/:id', userAuthMiddleware, getWorkshopById);
+router.get('/:id', requireAdmin, getWorkshopById);
 
 router.post('/availability', checkWorkshopAvailability);
 router.post('/pottery-availability', checkPotteryWorkshopAvailability);
@@ -188,8 +191,11 @@ router.post(
   createWorkshopBooking,
 );
 
-router.get('/bookings/all', userAuthMiddleware, getWorkshopBookings);
-router.get('/workshop-booking/:id', userAuthMiddleware, getWorkshopBookingById);
+// Admin: bookings + orders
+router.get('/bookings/all', requireAdmin, getWorkshopBookings);
+router.get('/orders/all', requireAdmin, getOrders);
+router.get('/workshop-booking/:id', requireAdmin, getWorkshopBookingById);
+router.patch('/workshop-booking/:id/status', requireAdmin, updateBookingStatus);
 
 // Cart apis
 router.post(

@@ -1184,3 +1184,29 @@ export const fetchPotteryWorkshopCapacity = async (data: {
     remainingCapacity,
   };
 };
+
+// --- Admin: orders list + booking status update ---
+
+export const getAllOrders = async (filters: any, limit: number, page: number) => {
+  const query: any = { isDeleted: false };
+  if (filters.search) {
+    query.orderNumber = { $regex: filters.search, $options: 'i' };
+  }
+  if (filters.paymentStatus && filters.paymentStatus !== 'All') {
+    query.paymentStatus = filters.paymentStatus;
+  }
+  const skip = (page - 1) * limit;
+  const data = await orderModel.find(query).sort({ createdAt: -1 }).limit(limit).skip(skip).lean();
+  const totalCount = await orderModel.countDocuments(query);
+  return { data, totalCount };
+};
+
+export const updateBookingStatusById = async (
+  id: string,
+  patch: { bookingStatus?: string; paymentStatus?: string },
+) => {
+  const set: Record<string, string> = {};
+  if (patch.bookingStatus) set.bookingStatus = patch.bookingStatus;
+  if (patch.paymentStatus) set.paymentStatus = patch.paymentStatus;
+  return await workshopBookingModel.findByIdAndUpdate(id, { $set: set }, { new: true }).lean();
+};

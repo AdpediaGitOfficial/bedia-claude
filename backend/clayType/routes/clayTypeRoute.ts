@@ -12,32 +12,32 @@ import { validateQuery, validateReqBody } from '../../middleware/validate';
 import { getAllClayTypeSchema } from '../routevalidators/getAllClayType';
 import { JSONSchemaType } from 'ajv';
 import { createClayTypeSchema } from '../routevalidators/createClayType';
-import { userAuthMiddleware } from '../../middleware/auth/authMiddleware';
+import { requireAdmin } from '../../middleware/auth/adminRoleMiddleware';
 
 const router = Router();
 
 router.get('/all', validateQuery(getAllClayTypeSchema as JSONSchemaType<unknown>), getAllClayTypes);
 router.get(
   '/adminAll',
-  userAuthMiddleware,
+  requireAdmin,
   validateQuery(getAllClayTypeSchema as JSONSchemaType<unknown>),
   getAllClayTypesForAdmin,
 );
 router.post(
   '/',
-  userAuthMiddleware,
+  requireAdmin,
   validateReqBody(createClayTypeSchema as JSONSchemaType<unknown>),
   sanitizeBody,
   createClayType,
 );
 router.put(
   '/:id',
-  userAuthMiddleware,
+  requireAdmin,
   validateReqBody(createClayTypeSchema as JSONSchemaType<unknown>),
   sanitizeBody,
   updateClayTypeById,
 );
-router.delete('/:id', userAuthMiddleware, deleteClayTypeById);
-router.get('/:id', userAuthMiddleware, getClayTypeById);
+router.delete('/:id', requireAdmin, deleteClayTypeById);
+router.get('/:id', requireAdmin, getClayTypeById);
 
 export default router;
