@@ -136,3 +136,56 @@ export interface Partner {
   logo?: string;
   websiteUrl?: string;
 }
+
+export interface OpeningHours {
+  _id: string;
+  title?: string;
+  days: string;
+  openTime: string;
+  closeTime: string;
+  isActive?: boolean;
+}
+
+export interface TermsAndCondition {
+  _id: string;
+  title: string;
+  content: string;
+  isActive?: boolean;
+}
+
+export interface GoogleReview {
+  _id: string;
+  authorName: string;
+  rating: number;
+  text?: string;
+  profilePhotoUrl?: string;
+  reviewTime?: number;
+  source?: 'google' | 'manual';
+  isActive?: boolean;
+}
+
+export interface Blog {
+  _id: string;
+  title: string;
+  content: string;
+  bannerImage?: string;
+  category?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  slug?: string;
+  writtenBy?: string;
+  createdAt?: string;
+}
+
+export interface AdminUserRow {
+  _id: string;
+  fullName?: string;
+  name?: string;
+  email?: string;
+  mobileNumber?: number;
+  role?: string;
+  status?: number;
+  createdAt?: string;
+}
+
+export type Lead = { _id: string; createdAt?: string } & Record<string, unknown>;

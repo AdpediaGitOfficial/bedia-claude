@@ -17,7 +17,7 @@ import { getAdminAllBlogsSchema } from '../routevalidators/getAdminAll';
 import { getAllBlogsSchema } from '../routevalidators/getAllBlogs';
 import { JSONSchemaType } from 'ajv';
 import { blogBodySchema } from '../routevalidators/createBlog';
-import { userAuthMiddleware } from '../../middleware/auth/authMiddleware';
+import { requireAdmin } from '../../middleware/auth/adminRoleMiddleware';
 
 const router = Router();
 
@@ -26,13 +26,13 @@ router.get('/slug/:slug', getBlogBySlug);
 router.get('/meta/:slug', getBlogMetaBySlug);
 router.get(
   '/adminAll',
-  userAuthMiddleware,
+  requireAdmin,
   validateQuery(getAdminAllBlogsSchema as JSONSchemaType<unknown>),
   getAllBlogsForAdmin,
 );
 router.post(
   '/',
-  userAuthMiddleware,
+  requireAdmin,
   sanitizeBody,
   validateReqBody(blogBodySchema as JSONSchemaType<unknown>),
   createBlog,
@@ -40,12 +40,12 @@ router.post(
 router.post('/xml', multerConfig.multipleFileUpload(), fetchFromXml);
 router.put(
   '/:id',
-  userAuthMiddleware,
+  requireAdmin,
   sanitizeBody,
   validateReqBody(blogBodySchema as JSONSchemaType<unknown>),
   updateBlogById,
 );
-router.delete('/:id', userAuthMiddleware, deleteBlogById);
-router.get('/:id', userAuthMiddleware, getBlogById);
+router.delete('/:id', requireAdmin, deleteBlogById);
+router.get('/:id', requireAdmin, getBlogById);
 
 export default router;

@@ -17,7 +17,7 @@ import { getAdminAllTermsAndConditionsSchema } from '../routevalidators/getAdmin
 import { getAllTermsAndConditionsSchema } from '../routevalidators/getAllTermsAndCondition';
 import { JSONSchemaType } from 'ajv';
 import { termsAndConditionBodySchema } from '../routevalidators/createTermsAndCondition';
-import { userAuthMiddleware } from '../../middleware/auth/authMiddleware';
+import { requireAdmin } from '../../middleware/auth/adminRoleMiddleware';
 
 const router = Router();
 
@@ -30,13 +30,13 @@ router.get('/slug/:slug', getTermsAndConditionBySlug);
 router.get('/meta/:slug', getTermsAndConditionMetaBySlug);
 router.get(
   '/adminAll',
-  userAuthMiddleware,
+  requireAdmin,
   validateQuery(getAdminAllTermsAndConditionsSchema as JSONSchemaType<unknown>),
   getAllTermsAndConditionsForAdmin,
 );
 router.post(
   '/',
-  userAuthMiddleware,
+  requireAdmin,
   sanitizeBody,
   validateReqBody(termsAndConditionBodySchema as JSONSchemaType<unknown>),
   createTermsAndCondition,
@@ -44,12 +44,12 @@ router.post(
 router.post('/xml', multerConfig.multipleFileUpload(), fetchFromXml);
 router.put(
   '/:id',
-  userAuthMiddleware,
+  requireAdmin,
   sanitizeBody,
   validateReqBody(termsAndConditionBodySchema as JSONSchemaType<unknown>),
   updateTermsAndConditionById,
 );
-router.delete('/:id', userAuthMiddleware, deleteTermsAndConditionById);
-router.get('/:id', userAuthMiddleware, getTermsAndConditionById);
+router.delete('/:id', requireAdmin, deleteTermsAndConditionById);
+router.get('/:id', requireAdmin, getTermsAndConditionById);
 
 export default router;

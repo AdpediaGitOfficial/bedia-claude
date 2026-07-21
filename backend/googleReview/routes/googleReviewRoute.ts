@@ -14,7 +14,7 @@ import { getAdminAllGoogleReviewsSchema } from '../routevalidators/getAdminAll';
 import { getAllGoogleReviewsSchema } from '../routevalidators/getAllGoogleReview';
 import { JSONSchemaType } from 'ajv';
 import { googleReviewBodySchema } from '../routevalidators/createGoogleReview';
-import { userAuthMiddleware } from '../../middleware/auth/authMiddleware';
+import { requireAdmin } from '../../middleware/auth/adminRoleMiddleware';
 
 const router = Router();
 
@@ -25,22 +25,22 @@ router.get(
 );
 router.get(
   '/adminAll',
-  userAuthMiddleware,
+  requireAdmin,
   validateQuery(getAdminAllGoogleReviewsSchema as JSONSchemaType<unknown>),
   getAllGoogleReviewsForAdmin,
 );
 router.post(
   '/',
-  userAuthMiddleware,
+  requireAdmin,
   sanitizeBody,
   validateReqBody(googleReviewBodySchema as JSONSchemaType<unknown>),
   createGoogleReview,
 );
 
-router.post('/sync', userAuthMiddleware, syncGoogleReviews);
+router.post('/sync', requireAdmin, syncGoogleReviews);
 
-router.put('/:id', userAuthMiddleware, sanitizeBody, updateGoogleReviewById);
-router.delete('/:id', userAuthMiddleware, deleteGoogleReviewById);
-router.get('/:id', userAuthMiddleware, getGoogleReviewById);
+router.put('/:id', requireAdmin, sanitizeBody, updateGoogleReviewById);
+router.delete('/:id', requireAdmin, deleteGoogleReviewById);
+router.get('/:id', requireAdmin, getGoogleReviewById);
 
 export default router;

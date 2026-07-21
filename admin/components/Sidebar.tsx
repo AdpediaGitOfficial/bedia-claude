@@ -14,6 +14,12 @@ import {
   HelpCircle,
   Quote,
   Handshake,
+  Star,
+  Clock,
+  FileText,
+  Newspaper,
+  Users,
+  Inbox,
 } from 'lucide-react';
 
 const NAV = [
@@ -27,6 +33,12 @@ const NAV = [
   { href: '/faqs', label: 'FAQs', icon: HelpCircle },
   { href: '/testimonials', label: 'Testimonials', icon: Quote },
   { href: '/partners', label: 'Partners', icon: Handshake },
+  { href: '/reviews', label: 'Reviews', icon: Star },
+  { href: '/opening-hours', label: 'Opening Hours', icon: Clock },
+  { href: '/terms', label: 'Terms & Conditions', icon: FileText },
+  { href: '/blog', label: 'Blog', icon: Newspaper },
+  { href: '/users', label: 'Users', icon: Users },
+  { href: '/leads', label: 'Leads', icon: Inbox },
 ];
 
 export function Sidebar() {
