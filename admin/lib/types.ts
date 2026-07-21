@@ -105,3 +105,34 @@ export interface Order {
 export interface DashboardStats {
   [key: string]: number | string | undefined;
 }
+
+export interface Gallery {
+  _id: string;
+  title: string;
+  images?: string[];
+  description?: string;
+  isActive?: boolean;
+}
+
+export interface Faq {
+  _id: string;
+  question: string;
+  answer: string;
+  category?: string;
+  isActive?: boolean;
+}
+
+export interface Testimonial {
+  _id: string;
+  content: string;
+  author: string;
+  designation?: string;
+  authorImage?: string;
+}
+
+export interface Partner {
+  _id: string;
+  name: string;
+  logo?: string;
+  websiteUrl?: string;
+}

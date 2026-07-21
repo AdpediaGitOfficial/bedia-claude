@@ -12,7 +12,7 @@ import { validateQuery, validateReqBody } from '../../middleware/validate';
 import { getAllPartnersSchema } from '../routevalidators/getAllPartners';
 import { JSONSchemaType } from 'ajv';
 import { createPartnerSchema } from '../routevalidators/createPartner';
-import { userAuthMiddleware } from '../../middleware/auth/authMiddleware';
+import { requireAdmin } from '../../middleware/auth/adminRoleMiddleware';
 
 const router = Router();
 
@@ -20,25 +20,25 @@ router.get('/all', validateQuery(getAllPartnersSchema as JSONSchemaType<unknown>
 
 router.get(
   '/adminAll',
-  userAuthMiddleware,
+  requireAdmin,
   validateQuery(getAllPartnersSchema as JSONSchemaType<unknown>),
   getAllPartnersForAdmin,
 );
 router.post(
   '/',
-  userAuthMiddleware,
+  requireAdmin,
   sanitizeBody,
   validateReqBody(createPartnerSchema as JSONSchemaType<unknown>),
   createPartner,
 );
 router.put(
   '/:id',
-  userAuthMiddleware,
+  requireAdmin,
   sanitizeBody,
   validateReqBody(createPartnerSchema as JSONSchemaType<unknown>),
   updatePartnerById,
 );
-router.delete('/:id', userAuthMiddleware, deletePartnerById);
-router.get('/:id', userAuthMiddleware, getPartnerById);
+router.delete('/:id', requireAdmin, deletePartnerById);
+router.get('/:id', requireAdmin, getPartnerById);
 
 export default router;

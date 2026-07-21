@@ -10,6 +10,10 @@ import {
   Layers,
   CalendarCheck,
   Receipt,
+  Images,
+  HelpCircle,
+  Quote,
+  Handshake,
 } from 'lucide-react';
 
 const NAV = [
@@ -19,6 +23,10 @@ const NAV = [
   { href: '/clay-types', label: 'Clay Types', icon: Layers },
   { href: '/bookings', label: 'Bookings', icon: CalendarCheck },
   { href: '/orders', label: 'Orders', icon: Receipt },
+  { href: '/gallery', label: 'Gallery', icon: Images },
+  { href: '/faqs', label: 'FAQs', icon: HelpCircle },
+  { href: '/testimonials', label: 'Testimonials', icon: Quote },
+  { href: '/partners', label: 'Partners', icon: Handshake },
 ];
 
 export function Sidebar() {
