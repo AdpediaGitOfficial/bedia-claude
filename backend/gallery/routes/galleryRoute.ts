@@ -12,32 +12,32 @@ import { validateQuery, validateReqBody } from '../../middleware/validate';
 import { getAllGallerySchema } from '../routevalidators/getAllGallery';
 import { JSONSchemaType } from 'ajv';
 import { createGallerySchema } from '../routevalidators/createGallery';
-import { userAuthMiddleware } from '../../middleware/auth/authMiddleware';
+import { requireAdmin } from '../../middleware/auth/adminRoleMiddleware';
 
 const router = Router();
 
 router.get('/all', validateQuery(getAllGallerySchema as JSONSchemaType<unknown>), getAllGalleries);
 router.get(
   '/adminAll',
-  userAuthMiddleware,
+  requireAdmin,
   validateQuery(getAllGallerySchema as JSONSchemaType<unknown>),
   getAllGalleriesForAdmin,
 );
 router.post(
   '/',
-  userAuthMiddleware,
+  requireAdmin,
   validateReqBody(createGallerySchema as JSONSchemaType<unknown>),
   sanitizeBody,
   createGallery,
 );
 router.put(
   '/:id',
-  userAuthMiddleware,
+  requireAdmin,
   validateReqBody(createGallerySchema as JSONSchemaType<unknown>),
   sanitizeBody,
   updateGalleryById,
 );
-router.delete('/:id', userAuthMiddleware, deleteGalleryById);
-router.get('/:id', userAuthMiddleware, getGalleryById);
+router.delete('/:id', requireAdmin, deleteGalleryById);
+router.get('/:id', requireAdmin, getGalleryById);
 
 export default router;

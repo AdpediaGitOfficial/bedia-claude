@@ -13,32 +13,32 @@ import { getAdminAllFaqsSchema } from '../routevalidators/getAdminAll';
 import { getAllFaqsSchema } from '../routevalidators/getAllFaqs';
 import { JSONSchemaType } from 'ajv';
 import { faqBodySchema } from '../routevalidators/createFaq';
-import { userAuthMiddleware } from '../../middleware/auth/authMiddleware';
+import { requireAdmin } from '../../middleware/auth/adminRoleMiddleware';
 
 const router = Router();
 
 router.get('/all', validateQuery(getAllFaqsSchema as JSONSchemaType<unknown>), getAllFaqs);
 router.get(
   '/adminAll',
-  userAuthMiddleware,
+  requireAdmin,
   validateQuery(getAdminAllFaqsSchema as JSONSchemaType<unknown>),
   getAllFaqsForAdmin,
 );
 router.post(
   '/',
-  userAuthMiddleware,
+  requireAdmin,
   sanitizeBody,
   validateReqBody(faqBodySchema as JSONSchemaType<unknown>),
   createFaq,
 );
 router.put(
   '/:id',
-  userAuthMiddleware,
+  requireAdmin,
   sanitizeBody,
   validateReqBody(faqBodySchema as JSONSchemaType<unknown>),
   updateFaqById,
 );
-router.delete('/:id', userAuthMiddleware, deleteFaqById);
-router.get('/:id', userAuthMiddleware, getFaqById);
+router.delete('/:id', requireAdmin, deleteFaqById);
+router.get('/:id', requireAdmin, getFaqById);
 
 export default router;

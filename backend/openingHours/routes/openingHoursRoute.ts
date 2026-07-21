@@ -12,7 +12,7 @@ import { validateQuery, validateReqBody } from '../../middleware/validate';
 import { getAllOpeningHoursSchema } from '../routevalidators/getAllopeningHours';
 import { JSONSchemaType } from 'ajv';
 import { createOpeningHoursSchema } from '../routevalidators/createOpeningHours';
-import { userAuthMiddleware } from '../../middleware/auth/authMiddleware';
+import { requireAdmin } from '../../middleware/auth/adminRoleMiddleware';
 
 const router = Router();
 
@@ -23,25 +23,25 @@ router.get(
 );
 router.get(
   '/adminAll',
-  userAuthMiddleware,
+  requireAdmin,
   validateQuery(getAllOpeningHoursSchema as JSONSchemaType<unknown>),
   getAllOpeningHoursForAdmin,
 );
 router.post(
   '/',
-  userAuthMiddleware,
+  requireAdmin,
   validateReqBody(createOpeningHoursSchema as JSONSchemaType<unknown>),
   sanitizeBody,
   createOpeningHours,
 );
 router.put(
   '/:id',
-  userAuthMiddleware,
+  requireAdmin,
   validateReqBody(createOpeningHoursSchema as JSONSchemaType<unknown>),
   sanitizeBody,
   updateOpeningHoursById,
 );
-router.delete('/:id', userAuthMiddleware, deleteOpeningHoursById);
-router.get('/:id', userAuthMiddleware, getOpeningHoursById);
+router.delete('/:id', requireAdmin, deleteOpeningHoursById);
+router.get('/:id', requireAdmin, getOpeningHoursById);
 
 export default router;

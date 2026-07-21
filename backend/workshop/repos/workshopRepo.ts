@@ -46,7 +46,10 @@ export const fetchAllWorkshops = async (
 };
 
 export const fetchWorkshopsByCategory = async (query: any, skip: number, limit: number) => {
-  return await workshopModel
+  // `options` is fetched (not excluded) so we can surface the first option's
+  // price as a top-level `price`, then the full options array is dropped from
+  // the response.
+  const workshops = await workshopModel
     .find(query)
     .select({
       keyAdvantages: 0,
@@ -59,7 +62,6 @@ export const fetchWorkshopsByCategory = async (query: any, skip: number, limit: 
       defaultSlots: 0,
       nonAvailabilityDates: 0,
       nonAvailabilityDays: 0,
-      options: 0,
       showOnHomepage: 0,
       __v: 0,
       isActive: 0,
@@ -70,6 +72,14 @@ export const fetchWorkshopsByCategory = async (query: any, skip: number, limit: 
     .skip(skip)
     .limit(limit)
     .lean();
+
+  return workshops.map((workshop) => {
+    const { options, ...rest } = workshop as typeof workshop & {
+      options?: { price?: number }[];
+    };
+    const price = options && options.length > 0 ? options[0]?.price ?? null : null;
+    return { ...rest, price };
+  });
 };
 
 // export const fetchHomepageWorkshops = async () => {
@@ -1173,4 +1183,30 @@ export const fetchPotteryWorkshopCapacity = async (data: {
     bookedCount,
     remainingCapacity,
   };
+};
+
+// --- Admin: orders list + booking status update ---
+
+export const getAllOrders = async (filters: any, limit: number, page: number) => {
+  const query: any = { isDeleted: false };
+  if (filters.search) {
+    query.orderNumber = { $regex: filters.search, $options: 'i' };
+  }
+  if (filters.paymentStatus && filters.paymentStatus !== 'All') {
+    query.paymentStatus = filters.paymentStatus;
+  }
+  const skip = (page - 1) * limit;
+  const data = await orderModel.find(query).sort({ createdAt: -1 }).limit(limit).skip(skip).lean();
+  const totalCount = await orderModel.countDocuments(query);
+  return { data, totalCount };
+};
+
+export const updateBookingStatusById = async (
+  id: string,
+  patch: { bookingStatus?: string; paymentStatus?: string },
+) => {
+  const set: Record<string, string> = {};
+  if (patch.bookingStatus) set.bookingStatus = patch.bookingStatus;
+  if (patch.paymentStatus) set.paymentStatus = patch.paymentStatus;
+  return await workshopBookingModel.findByIdAndUpdate(id, { $set: set }, { new: true }).lean();
 };

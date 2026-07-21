@@ -15,6 +15,8 @@ import {
   checkWorkshopAvailabilityUseCase,
   createWorkshopBookingUseCase,
   getWorkshopBookingsUseCase,
+  getOrdersUseCase,
+  updateBookingStatusUseCase,
   getWorkshopBookingByIdUseCase,
   addToCartUseCase,
   removeCartItemUseCase,
@@ -567,3 +569,26 @@ export const checkPotteryWorkshopCapacity = asyncHandler(
     });
   },
 );
+
+// --- Admin: orders list + booking status update ---
+
+export const getOrders = asyncHandler(async (req: Request, res: Response) => {
+  const filters = {
+    search: req.query.search as string,
+    paymentStatus: req.query.paymentStatus as string,
+  };
+  const limit = parseInt(req.query.limit as string) || 10;
+  const page = parseInt(req.query.page as string) || 1;
+  const result = await getOrdersUseCase(filters, limit, page);
+  res.status(200).json({ success: true, message: 'Orders fetched successfully', result });
+});
+
+export const updateBookingStatus = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { bookingStatus, paymentStatus } = req.body as {
+    bookingStatus?: string;
+    paymentStatus?: string;
+  };
+  const result = await updateBookingStatusUseCase(id, { bookingStatus, paymentStatus });
+  res.status(200).json({ success: true, message: 'Booking updated successfully', result });
+});

@@ -12,7 +12,7 @@ import { validateQuery, validateReqBody } from '../../middleware/validate';
 import { getAllTestimonialsSchema } from '../routevalidators/getAllTestimonials';
 import { JSONSchemaType } from 'ajv';
 import { createTestimonialSchema } from '../routevalidators/createTestimonial';
-import { userAuthMiddleware } from '../../middleware/auth/authMiddleware';
+import { requireAdmin } from '../../middleware/auth/adminRoleMiddleware';
 
 const router = Router();
 
@@ -23,25 +23,25 @@ router.get(
 );
 router.get(
   '/adminAll',
-  userAuthMiddleware,
+  requireAdmin,
   validateQuery(getAllTestimonialsSchema as JSONSchemaType<unknown>),
   getAllTestimonialsForAdmin,
 );
 router.post(
   '/',
-  userAuthMiddleware,
+  requireAdmin,
   sanitizeBody,
   validateReqBody(createTestimonialSchema as JSONSchemaType<unknown>),
   createTestimonial,
 );
 router.put(
   '/:id',
-  userAuthMiddleware,
+  requireAdmin,
   sanitizeBody,
   validateReqBody(createTestimonialSchema as JSONSchemaType<unknown>),
   updateTestimonialById,
 );
-router.delete('/:id', userAuthMiddleware, deleteTestimonialById);
-router.get('/:id', userAuthMiddleware, getTestimonialById);
+router.delete('/:id', requireAdmin, deleteTestimonialById);
+router.get('/:id', requireAdmin, getTestimonialById);
 
 export default router;

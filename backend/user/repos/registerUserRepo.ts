@@ -15,7 +15,7 @@ export const checkUserExist = async (email: string): Promise<{ _id: string } | n
       isDeleted: false,
     })
     .select({ _id: 1 })
-    .lean();
+    .lean<{ _id: string } | null>();
 };
 
 // export const checkUserExist = async (
@@ -57,7 +57,7 @@ export const verifyOtp = async (
     .findOne({ mobileNumber, otp, isDeleted: false })
     .sort({ createdAt: -1 })
     .select({ _id: 1 })
-    .lean();
+    .lean<{ _id: string } | null>();
 };
 
 export const setUserVerified = async (id: string): Promise<{ _id: string } | null> => {
@@ -110,12 +110,12 @@ export const checkUserNumberExist = async (
     return await usersModel
       .findOne({ mobileNumber, isDeleted: false, status: 1, mobileNumberVerified: true })
       .select({ _id: 1, fixedOtp: 1 })
-      .lean();
+      .lean<{ _id: string; fixedOtp: string } | null>();
   }
   return await usersModel
     .findOne({ mobileNumber, isDeleted: false, status: 1 })
     .select({ _id: 1, fixedOtp: 1 })
-    .lean();
+    .lean<{ _id: string; fixedOtp: string } | null>();
 };
 
 export const updateUserOtp = async (
@@ -134,7 +134,10 @@ export const getProfile = async (userId: string): Promise<IUsers | null> => {
 
 export const checkUserIdExist = async (userId: string): Promise<{ _id: string } | null> => {
   const _id = ObjectID(userId);
-  return await usersModel.findOne({ _id, isDeleted: false }).select({ _id: 1 }).lean();
+  return await usersModel
+    .findOne({ _id, isDeleted: false })
+    .select({ _id: 1 })
+    .lean<{ _id: string } | null>();
 };
 
 export const updateUser = async (id: string, data: IUserBody): Promise<IUserBody> => {
@@ -157,7 +160,7 @@ export const checkMobileExist = async (
       _id: { $ne: userId },
     })
     .select({ _id: 1 })
-    .lean();
+    .lean<{ _id: string } | null>();
 };
 
 export const getProfileById = async (userId: string): Promise<IUsers | null> => {
@@ -265,7 +268,7 @@ export const checkMobileEmailExist = async (
       _id: { $ne: userId },
     })
     .select({ _id: 1 })
-    .lean();
+    .lean<{ _id: string } | null>();
 };
 
 export const deleteToken = async (

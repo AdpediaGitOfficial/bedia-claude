@@ -32,8 +32,14 @@ npm run start:dev
 
 # Frontend (separate terminal)
 cd frontend
+cp .env.example .env.local  # set NEXT_PUBLIC_API_BASE_URL
 npm install
 npm run dev
+
+# Dashboard (Angular admin, separate terminal)
+cd dashboard
+npm install
+npm start   # baseUrl is set in src/environments/environment.ts
 
 # Restore the database dump (optional, local Mongo)
 mongorestore --db bediapottery database/bediaprive_db
