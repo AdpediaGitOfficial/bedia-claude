@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Button, Card, Input, Label, Textarea } from '@/components/ui';
+import { ImageUpload } from '@/components/ImageUpload';
 import type { Category, ClayType, Workshop, WorkshopOption, WorkshopSlot } from '@/lib/types';
 import { listCategories } from '@/services/category.service';
 import { listClayTypes } from '@/services/clayType.service';
@@ -118,8 +119,13 @@ export function WorkshopForm({
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <Label>Banner image URL</Label>
-            <Input value={bannerImage} onChange={(e) => setBannerImage(e.target.value)} placeholder="https://…" />
+            <Label>Banner image</Label>
+            <ImageUpload
+              images={bannerImage ? [bannerImage] : []}
+              onChange={(urls) => setBannerImage(urls[0] ?? '')}
+              max={1}
+              location="workshops"
+            />
           </div>
           <div>
             <Label>Type</Label>
@@ -189,8 +195,13 @@ export function WorkshopForm({
                 <Input value={o.priceDescription ?? ''} onChange={(e) => updateOption(i, { priceDescription: e.target.value })} />
               </div>
               <div>
-                <Label>Image URL</Label>
-                <Input value={o.image ?? ''} onChange={(e) => updateOption(i, { image: e.target.value })} />
+                <Label>Image</Label>
+                <ImageUpload
+                  images={o.image ? [o.image] : []}
+                  onChange={(urls) => updateOption(i, { image: urls[0] ?? '' })}
+                  max={1}
+                  location="workshops"
+                />
               </div>
               <div className="md:col-span-3">
                 <Label>Inclusions (comma-separated)</Label>

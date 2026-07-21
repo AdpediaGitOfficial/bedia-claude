@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Button, Badge, Input, Label, Modal, Textarea } from '@/components/ui';
 import { DataTable, type Column } from '@/components/DataTable';
+import { ImageUpload } from '@/components/ImageUpload';
 import { apiError } from '@/lib/api';
 import type { ClayType } from '@/lib/types';
 import {
@@ -23,7 +24,7 @@ export default function ClayTypesPage() {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<ClayType | null>(null);
   const [form, setForm] = useState<ClayTypeInput>(EMPTY);
-  const [imageStr, setImageStr] = useState('');
+  const [images, setImages] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
 
   const load = useCallback(async () => {
@@ -45,7 +46,7 @@ export default function ClayTypesPage() {
   function openCreate() {
     setEditing(null);
     setForm(EMPTY);
-    setImageStr('');
+    setImages([]);
     setOpen(true);
   }
   function openEdit(c: ClayType) {
@@ -57,7 +58,7 @@ export default function ClayTypesPage() {
       image: c.image ?? [],
       isActive: c.isActive ?? true,
     });
-    setImageStr((c.image ?? []).join(', '));
+    setImages(c.image ?? []);
     setOpen(true);
   }
 
@@ -67,7 +68,7 @@ export default function ClayTypesPage() {
     try {
       const payload: ClayTypeInput = {
         ...form,
-        image: imageStr.split(',').map((s) => s.trim()).filter(Boolean),
+        image: images,
       };
       if (editing) {
         await updateClayType(editing._id, payload);
@@ -152,8 +153,8 @@ export default function ClayTypesPage() {
             />
           </div>
           <div>
-            <Label>Image URLs (comma-separated)</Label>
-            <Input value={imageStr} onChange={(e) => setImageStr(e.target.value)} placeholder="https://…" />
+            <Label>Images</Label>
+            <ImageUpload images={images} onChange={setImages} max={5} location="clay-types" />
           </div>
           <label className="flex items-center gap-2 text-sm">
             <input

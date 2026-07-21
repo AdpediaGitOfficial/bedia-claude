@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Button, Badge, Input, Label, Modal, Textarea } from '@/components/ui';
 import { DataTable, type Column } from '@/components/DataTable';
+import { ImageUpload } from '@/components/ImageUpload';
 import { apiError } from '@/lib/api';
 import type { Category } from '@/lib/types';
 import {
@@ -30,7 +31,7 @@ export default function CategoriesPage() {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Category | null>(null);
   const [form, setForm] = useState<CategoryInput>(EMPTY);
-  const [imageStr, setImageStr] = useState('');
+  const [images, setImages] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
 
   const load = useCallback(async () => {
@@ -52,7 +53,7 @@ export default function CategoriesPage() {
   function openCreate() {
     setEditing(null);
     setForm(EMPTY);
-    setImageStr('');
+    setImages([]);
     setOpen(true);
   }
 
@@ -66,7 +67,7 @@ export default function CategoriesPage() {
       showOnHomepage: c.showOnHomepage ?? false,
       isActive: c.isActive ?? true,
     });
-    setImageStr((c.image ?? []).join(', '));
+    setImages(c.image ?? []);
     setOpen(true);
   }
 
@@ -76,10 +77,7 @@ export default function CategoriesPage() {
     try {
       const payload: CategoryInput = {
         ...form,
-        image: imageStr
-          .split(',')
-          .map((s) => s.trim())
-          .filter(Boolean),
+        image: images,
       };
       if (editing) {
         await updateCategory(editing._id, payload);
@@ -173,8 +171,8 @@ export default function CategoriesPage() {
             />
           </div>
           <div>
-            <Label>Image URLs (comma-separated)</Label>
-            <Input value={imageStr} onChange={(e) => setImageStr(e.target.value)} placeholder="https://…" />
+            <Label>Images</Label>
+            <ImageUpload images={images} onChange={setImages} max={5} location="categories" />
           </div>
           <div className="flex gap-6">
             <label className="flex items-center gap-2 text-sm">
